@@ -71,20 +71,20 @@ statistics](https://github.com/matloff/fastStat).
   conditioning value t.  Also, the variance is constant in t.
   (Source of the standard linear model.)
 
-* (X-&mu;)' &Sigma;<sup>-1</sup> (X-&mu;) has a chi-squared distribution
+* M = (X-&mu;)' &Sigma;<sup>-1</sup> (X-&mu;) has a chi-squared distribution
   with p degrees of freedom.
 
-# Limit Theorems
+* So if &eta; is the q-th quantitle of the &chi;<sup>2</sup>
+  distribution with p degrees of freedom, then
 
-* Multivariate Central Limit Theorem: Let X<sub>i</sub>, i = 1,2,... be
-  iid random vectors with mean &mu; and covariance matrix &Sigma;.
-  Define T<sub>n</sub> = X<sub>1</sub>+...+X<sub>n</sub>, which has mean
-  and covariance matrix n &mu; and n &Sigma;. Then as n &rarr; &infin; the 
-  (p-dimensional) cdf of 
+  P(M < &eta;) = q
 
-    1/n<sup>1/2</sup> &Sigma;<sup>-1/2</sup> (T<sub>n</sub> - n &mu;)
+* In the above picture, horizontal slices, i.e. level sets, are
+  ellipses. For p > 2, the regions are p-dimensional ellipsoids. This
+  can be used to derive confidence regions in statistical applications,
+  as will be seen below.
 
-  goes to the cdf of N(0,I), where I is the identity matrix of size p.
+# Types of Convergence
 
 * A sequence of random variables V<sub>i</sub> is said to converge to a
   random variable V if for every &epsilon; > 0,
@@ -94,3 +94,59 @@ statistics](https://github.com/matloff/fastStat).
 * For random vectors V<sup>i</sup>, replace | | by, e.g. Euclidean
   distance.
 
+* Say we have random variables Q<sub>i</sub>, not necessarily iid. If
+  for some constant c we have
+
+  P(lim<sub>n &rarr; &infin;</sub> Q<sub>n</sub> = c) = 1
+
+  then we say Q<sub>n</sub> converges *almost surely* to c.
+
+* If cdfs converge, i.e. for each t,
+
+   lim<sub>n &rarr; &infin;</sub> P(Q<sub>n</sub> &lt; t) = P(Q &lt; t) 
+
+  for some random variable Q, we say Q<sub>n</sub> *converges in
+  distribution*`to Q.
+
+* Example: the Strong Law of Large Numberss. If the Q<sub>n</sub> are
+  iid with mean &mu;, then the sample average converges to the
+  distributional average: Set
+
+  A<sub>n</sub> = (1/n) (V<sub>1</sub>+...+V<sub>n</sub>)
+
+  Then A<sub>n</sub> converges almost surely to &mu;.
+
+* Some types of convergence imply others:
+
+  almost sure => in probability => in distribution 
+
+# Central Limit Theorems
+
+* Univariate Central Limit Theorem: Let X<sub>i</sub>, i = 1,2,... be
+  iid random variables with mean &mu; and variance &sigma;<sup>2</sup>.
+  Define T<sub>n</sub> = X<sub>1</sub>+...+X<sub>n</sub>, which has mean
+  and variance n &mu; and n &sigma;<sup>2</sup>. Then as n &rarr; &infin; the 
+  cdf of 
+
+    1/n<sup>1/2</sup> &sigma;<sup>-1</sup> (T<sub>n</sub> - n &mu;)
+
+  goes to the cdf of N(0,1).
+
+* We say that X<sub>i</sub> *converges in distribution* to X, the name
+  of course alluding to convergence of the cdfs.
+
+* Note that while scaling by the factor n<sup>1/2</sup> is what works in
+  this context of sums, other rates may apply for other quantities. For
+  example, if we are interested in the maximum of
+  X<sub>1</sub>,...,X<sub>n</sub>, the we may divide by (2 log
+  n)<sup>1/2</sup>
+
+* Multivariate Central Limit Theorem: Let X<sub>i</sub>, i = 1,2,... be
+  iid random vectors with mean vector &mu; and covariance matrix &Sigma;.
+  Define T<sub>n</sub> = X<sub>1</sub>+...+X<sub>n</sub>, which has mean
+  and covariance matrix n &mu; and n &Sigma;. Then as n &rarr; &infin; the 
+  (p-dimensional) cdf of 
+
+    1/n<sup>1/2</sup> &Sigma;<sup>-1/2</sup> (T<sub>n</sub> - n &mu;)
+
+  goes to the cdf of N(0,I), where I is the identity matrix of size p.
