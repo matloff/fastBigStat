@@ -24,21 +24,45 @@ statistics](https://github.com/matloff/fastStat).
 
 * Prime (') will indicate matrix transpose.  
 
-* Cov will represent the covariance matrix of a random vector.
+* The identity matrix, of whatever given size, will be denoted by I.
 
 # Some Preliminaries 
 
 * Consider a random vector X = (X<sub>1</sub>,...,X<sub>p</sub>)', 
   and a constant m x p matrix A.
 
-* E(AX) = A E(X).
+* E(AX) = A E(X).  Note that these are vector, i.e. componentwise
+  means.
 
-* Cov(AX) = A Cov(X) A'.
+* Covariance
 
-* Let &Sigma; be a covariance matrix. As a real, symmetric matrix, it
-  can be diagonalized, with the associated diagonal matrix having
-  nonnegative elements. In this way, one can construct a matrix W such
-  that W<sup>2</sup> = &Sigma;, and thus write W = D<sup>1/2</sup>.
+    - For random variables U and V, with means &alpha; and &beta;,
+      define 
+
+      Cov(U,V) = E[(U-&alpha;)(V-&beta;)]
+
+      Intuitively, if often when U is above its mean then V is also
+      above its mean, the the covariance will be positive, etc. It's
+      like correlation, and in fact the latter is
+
+      &rho;(U,V) = Cov(U,V) / [sqrt(Var(U) sqrt(Var(V))]
+
+    - The covariance matrix Cov(X) of a random vector 
+      X = (X<sub>1</sub>,...,X<sub>p</sub>)' is a p x p
+      matrix with (i,j) element Cov(X<sub>i</sub>,X<sub>j</sub>),
+      which reduces to Var(X<sub>i</sub>) when i = j.
+
+    - In matrix terms, Cov(X) = [(X - &mu;) (X - &mu;)'], where &mu; =
+      E(X).
+
+    - Cov(AX) = A Cov(X) A'.
+
+    - Let &Sigma; be a covariance matrix. As a real, symmetric matrix,
+      it can be diagonalized, i.e. &Sigma; = P D P' for an orthogonal
+      matrix O. Let W = PD<sup>1/2</sup>P', where the square root
+      matrix simply takes the square roots of the diagonal elements of
+      D. Then W<sup>2</sup> = &Sigma;, and we can thus write 
+      W = &Sigma;<sup>1/2</sup>.
 
 # The Multivariate Normal Distribution Family
 
@@ -86,29 +110,22 @@ statistics](https://github.com/matloff/fastStat).
 
 # Types of Convergence
 
-* A sequence of random variables V<sub>i</sub> is said to converge to a
-  random variable V if for every &epsilon; > 0,
+* A sequence of random variables V<sub>n</sub> is said to converge 
+  *in probability* to a random variable V if for every &epsilon; > 0,
 
   lim<sub>n &rarr; &infin;</sub> P(|V<sub>n</sub> - V| > &epsilon;) = 0
  
 * For random vectors V<sup>i</sup>, replace | | by, e.g. Euclidean
   distance.
 
-* Say we have random variables Q<sub>i</sub>, not necessarily iid. If
+* Say we have random variables Q<sub>n</sub>, not necessarily iid. If
   for some constant c we have
 
   P(lim<sub>n &rarr; &infin;</sub> Q<sub>n</sub> = c) = 1
 
   then we say Q<sub>n</sub> converges *almost surely* to c.
 
-* If cdfs converge, i.e. for each t,
-
-   lim<sub>n &rarr; &infin;</sub> P(Q<sub>n</sub> &lt; t) = P(Q &lt; t) 
-
-  for some random variable Q, we say Q<sub>n</sub> *converges in
-  distribution*`to Q.
-
-* Example: the Strong Law of Large Numberss. If the Q<sub>n</sub> are
+* Example: the Strong Law of Large Numbers. If the Q<sub>n</sub> are
   iid with mean &mu;, then the sample average converges to the
   distributional average: Set
 
@@ -116,37 +133,64 @@ statistics](https://github.com/matloff/fastStat).
 
   Then A<sub>n</sub> converges almost surely to &mu;.
 
+* If cdfs converge, i.e. for each t,
+
+   lim<sub>n &rarr; &infin;</sub> P(Q<sub>n</sub> &le; t) = P(Q &le; t) 
+
+  for some random variable Q, we say Q<sub>n</sub> converges *in
+  distribution* to Q.
+
 * Some types of convergence imply others:
 
   almost sure => in probability => in distribution 
+
+* In p dimensions, we say that X<sub>i</sub> converges *in distribution* 
+  to X if the p-dimensional cdfs converge.
+
+* That definition is hard to deal with, but the Cramer-Wold device often
+  makes things easy: Consider a sequence of random vectors X<sub>n</sub>
+  and another random vector X. Then X<sub>n</sub> converges in
+  distribution to X if and only if for any p-vector c, c'X<sub>n</sub>
+  converges in distribution to c'X.
+
+* Slutsky Theorem (due to Russian mathematician Evgeny Slutsky). Say
+  X<sub>n</sub> converges in distribution to X, and Y<sub>n</sub>
+  converges in probability to a constant c. The:
+
+    - X<sub>n</sub> + Y<sub>n</sub> converges in distribution to X+c.
+
+    - X<sub>n</sub> Y<sub>n</sub> converges in distribution to Xc.
+
+    - X<sub>n</sub> / Y<sub>n</sub> converges in distribution to X/c.
+     
+  The quantities can be matrix valued, in which case u/v means u
+  v<sup>-1</sup>, i.e. matrix inverse.  Of course, the inverse must
+  exist for all this to be valid.
 
 # Central Limit Theorems
 
 * Univariate Central Limit Theorem: Let X<sub>i</sub>, i = 1,2,... be
   iid random variables with mean &mu; and variance &sigma;<sup>2</sup>.
   Define T<sub>n</sub> = X<sub>1</sub>+...+X<sub>n</sub>, which has mean
-  and variance n &mu; and n &sigma;<sup>2</sup>. Then as n &rarr; &infin; the 
-  cdf of 
+  and variance n &mu; and n &sigma;<sup>2</sup>. Then 
 
     1/n<sup>1/2</sup> &sigma;<sup>-1</sup> (T<sub>n</sub> - n &mu;)
 
-  goes to the cdf of N(0,1).
-
-* We say that X<sub>i</sub> *converges in distribution* to X, the name
-  of course alluding to convergence of the cdfs.
+  converges in distribution to N(0,1).
 
 * Note that while scaling by the factor n<sup>1/2</sup> is what works in
   this context of sums, other rates may apply for other quantities. For
   example, if we are interested in the maximum of
-  X<sub>1</sub>,...,X<sub>n</sub>, the we may divide by (2 log
-  n)<sup>1/2</sup>
+  X<sub>1</sub>,...,X<sub>n</sub> rather than their sum, then 
+  we may divide by (2 log n)<sup>1/2</sup> (and the limiting 
+  distribution will be something other than normal).
 
 * Multivariate Central Limit Theorem: Let X<sub>i</sub>, i = 1,2,... be
   iid random vectors with mean vector &mu; and covariance matrix &Sigma;.
   Define T<sub>n</sub> = X<sub>1</sub>+...+X<sub>n</sub>, which has mean
-  and covariance matrix n &mu; and n &Sigma;. Then as n &rarr; &infin; the 
-  (p-dimensional) cdf of 
+  and covariance matrix n &mu; and n &Sigma;. Then 
 
     1/n<sup>1/2</sup> &Sigma;<sup>-1/2</sup> (T<sub>n</sub> - n &mu;)
 
-  goes to the cdf of N(0,I), where I is the identity matrix of size p.
+  converges in distribution to  N(0,I). This can easily be proved using
+  the Cramer-Wold device.
