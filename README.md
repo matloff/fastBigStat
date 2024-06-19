@@ -125,7 +125,7 @@ statistics](https://github.com/matloff/fastStat).
 
   then we say Q<sub>n</sub> converges *almost surely* to c.
 
-* Example: the Strong Law of Large Numbers. If the Q<sub>n</sub> are
+* Example: the Strong Law of Large Numbers (SLLN). If the Q<sub>n</sub> are
   iid with mean &mu;, then the sample average converges to the
   distributional average: Set
 
@@ -157,17 +157,17 @@ statistics](https://github.com/matloff/fastStat).
   X<sub>n</sub> converges in distribution to X, and Y<sub>n</sub>
   converges in probability to a constant c. The:
 
-    - X<sub>n</sub> + Y<sub>n</sub> converges in distribution to X+c.
+    - (i) X<sub>n</sub> + Y<sub>n</sub> converges in distribution to X+c.
 
-    - X<sub>n</sub> Y<sub>n</sub> converges in distribution to Xc.
+    - (ii) X<sub>n</sub> Y<sub>n</sub> converges in distribution to Xc.
 
-    - X<sub>n</sub> / Y<sub>n</sub> converges in distribution to X/c.
+    - (iii) X<sub>n</sub> / Y<sub>n</sub> converges in distribution to X/c.
      
   The quantities can be matrix valued, in which case u/v means u
   v<sup>-1</sup>, i.e. matrix inverse.  Of course, the inverse must
   exist for all this to be valid.
 
-# Central Limit Theorems
+# Central Limit Theorems (CLTs)
 
 * Univariate Central Limit Theorem: Let X<sub>i</sub>, i = 1,2,... be
   iid random variables with mean &mu; and variance &sigma;<sup>2</sup>.
@@ -194,3 +194,66 @@ statistics](https://github.com/matloff/fastStat).
 
   converges in distribution to  N(0,I). This can easily be proved using
   the Cramer-Wold device.
+
+# Example: Linear Model with Fewer Assumptions
+
+* Let Y be a random variable and X a p-dimensional random vector. The classic
+  assumptions of the model are as follows. Let t = 
+  (t<sub>1</sub>,...,t<sub>p</sub>)'. 
+
+  - Linearity: E(Y | X = t) = 
+  &beta;<sub>0</sub> + 
+  &beta;<sub>1</sub> t<sub>1</sub> + ... +
+  &beta;<sub>p</sub> t<sub>p</sub>. 
+  for some unknown constant vector &beta; = 
+  (&beta;<sub>0</sub>, &beta;<sub>1</sub>+...+ &beta;<sub>p</sub>)'.
+
+  - Normality: The distribution of Y | X = t is normal for all t.
+
+  - Heteroscedasticity: Var(Y | X = t) is the same for all t.
+
+  - Independence: The random vectors (X<sub>1</sub>,Y<sub>1</sub>),...,
+  (X<sub>n</sub>,Y<sub>n</sub>) are independent.
+
+  (Here we have the X<sub>i</sub> random. In many books, they are
+  fixed.)
+
+* One estmates &beta; from the data, using the formula for the estimates
+  b = (b<sub>0</sub>, b<sub>1</sub>,...,b<sub>p</sub>)':
+
+  b = (A'A)<sup>-1</sup> A'W
+
+  where A is the n x (p+1) matrix will all 1s in column 1 and in column
+  j > 1, all n values of X<sub>j-1</sub>.  Here W is the vector of all n
+  values of Y.
+
+* The estimate vector b has an exact multivariate normal distribution
+  with mean &beta; and covariance matrix (A'A)<sup>-1</sup>. This
+  enables exact confidence intervals and tests. But we can use the
+  Central Limit Theorem to get approximate intervals and tests, as
+  follows. (Note: The notion of "exact" statistical inference is a myth.
+  No distribution in real life is exactly normal etc.)
+
+* To make things a little simpler to explain, we'll look at the
+  non-intercept model, in which E(X) is 0 and   
+
+  E(Y | X = t) = 
+  &beta;<sub>1</sub> t<sub>1</sub> + ... +
+  &beta;<sub>p</sub> t<sub>p</sub>. 
+
+  (One can easily convert the full model to the interceptless one by
+  subtracting means from X and Y.) So the A matrix is now n x p.
+
+* To prepare for the CLT, rewrite b:
+
+   b = [(1/n) A'A]<sup>-1</sup> [(1/n) A'W]
+
+
+
+* Let's first look at the "denominator" [(1/n) A'A]<sup>-1</sup>. The
+  number in row i, column j of A'A is the inner product of all n values
+  of X<sub>i</sub> and X<sub>j</sub>. (Check this.) That number is a sum
+  of n independent values, so the SLLN applies. Thus (1/n) A'A converges
+  almostt surely (and thus in probability) to E(XX'). (Again, check
+  this.) So, (1/n) A'A will play the role of "Y<sub>n</sub>" in part
+  (iii) of the Slutsky Theorem.
