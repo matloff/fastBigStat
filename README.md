@@ -78,6 +78,30 @@ statistics](https://github.com/matloff/fastStat).
       some departments are larger than others, that latter average is
       weighted.)
 
+* Role of the Data
+
+    - Say we have data W<sub>1</sub>,...,W<sub>n</sub>.
+
+    - The statistical view is to treat the data as a random sample from a
+      population.
+
+    - In computer science, the data are often viewed as fixed, but some
+      analyses described the data as coming from a "data generating
+      mechanism" and the like.
+
+    - We take the statistical view here. Typically the data are assumed
+      independent and identically distributed (iid). That first trait
+      arises from sampling with replacement (for large n, not much of an
+      issue), and the second means that each entity in the population
+      has the same probability of being sampled.
+
+      The sample mean
+
+    (1/n) (W<sub>1</sub>+...+W<sub>n</sub>)
+
+    is viewed as an estimate of the population mean E(W), where W has
+    the distribution, and so on. 
+
 # The Multivariate Normal Distribution Family
 
 * Consider a random vector X = (X<sub>1</sub>,...,X<sub>p</sub>)'. The mean
@@ -116,8 +140,8 @@ statistics](https://github.com/matloff/fastStat).
 
   - The variance of that distribution is constant in u.
 
-* M = (X-&mu;)' &Sigma;<sup>-1</sup> (X-&mu;) has a chi-squared distribution
-  with p degrees of freedom.
+* The *quadratic form* M = (X-&mu;)' &Sigma;<sup>-1</sup> (X-&mu;) has a 
+  chi-squared distribution with p degrees of freedom.
 
 * So if &eta; is the q-th quantitle of the &chi;<sup>2</sup>
   distribution with p degrees of freedom, then
@@ -207,9 +231,10 @@ statistics](https://github.com/matloff/fastStat).
 
     (b-&beta;)'[s<sup>-2</sup> (A'A)] (b-&beta;)
 
-    has an F-distribution with (p+1,n-p-1) df, but again for large n,
-    this is approximately &chi;<sup>2</sup> with p+1 df. This sets up a
-    confidence ellipsoid for &beta;:
+    has an F-distribution with (p+1,n-p-1) df. This is the
+    finite-sample version of the quadratic form discussed earlier.
+    But again for large n, this is approximately &chi;<sup>2</sup> with 
+    p+1 df. This sets up a confidence ellipsoid for &beta;:
 
     To form an approximate (1-&alpha;) 100% confidence ellipsoid for
     &beta;, let q be the upper-&alpha; quantile of the &chi;<sup>2</sup>
@@ -306,6 +331,53 @@ statistics](https://github.com/matloff/fastStat).
   the Cramer-Wold device.
 
 # Example: Method of Moments
+
+  - Suppose we are modeling some random variable with some parametric
+    distribution family, such as normal, exonential or gamma. We want to
+    estimate the parameter(s) from our data
+    X<sub>1</sub>,...,X<sub>n</sub>. How can we do this?
+
+  - The most famous general method is *Maximum Likelihood Estimation*
+    (MLE), but it's somewhat less-famous cousin, the *Method of Moments*,
+    is sometimes the handier one. (It is also the easier one to
+    explain.)
+
+  - The m-th *moment* of a random variable X is defined to be
+    E(X<sup>m</sup>), m = 1,2,.... Its natural sample estimate is 
+
+    A = (1/n) (X<sub>1</sub>+...+X<sub>n</sub>)
+
+  - Alternatively, for k > 1 one may use the m-th central moment, 
+
+    E[(X-E(X))<sup>m</sup>]
+
+    Since for k = 2 this is Var(X), things may be more convenient this way.
+
+  - Let's use k to denote the number of parameters in the given parametric
+    family. For instance, k = 2 for the univariate normal family,
+    corresponding to the two parameters &mu; and &sigma;^2. 
+
+  - Use &tau; to denote the population value of the parameter (it's a
+    vector if k > 1), and T to denote its sample estimate.
+
+  - Consider first an example with k = 1, the 
+    exponential distribution family:  
+
+    &tau; exp(-&tau;t).
+
+    The mean of this dtr is 1/&tau;, which would be estimated by 1/T. So
+    set this estimated population mean to the sample mean A: 1/T = A. 
+
+  - That gives T = 1/A, our Method of Moments estimate of &tau;. (By
+    coincidence, it is also the MLE.)
+
+  - For an example with k = 2, consider the *gamma distribution family*:
+
+    c &tau;<sub>1</sub><sup>&tau;<sub>2</sub></sup>
+    t<sup>&tau;<sub>2 - 1</sup></sub>;</sup>
+    exp(-&tau;<sub>1</sub>t)
+
+    
 
 # Example: Linear Model, Part II 
 
