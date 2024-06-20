@@ -342,23 +342,28 @@ statistics](https://github.com/matloff/fastStat).
     is sometimes the handier one. (It is also the easier one to
     explain.)
 
-  - The m-th *moment* of a random variable X is defined to be
-    E(X<sup>m</sup>), m = 1,2,.... Its natural sample estimate is 
+  - The r-th *moment* of a random variable X is defined to be
+    E(X<sup>r</sup>), r = 1,2,.... Its natural sample estimate is 
 
     A = (1/n) (X<sub>1</sub>+...+X<sub>n</sub>)
 
-  - Alternatively, for k > 1 one may use the m-th central moment, 
+  - Alternatively, for k > 1 one may use the r-th central moment, 
 
-    E[(X-E(X))<sup>m</sup>]
+    E[(X-E(X))<sup>r</sup>]
 
-    Since for k = 2 this is Var(X), things may be more convenient this way.
+    Since for k = 2 this is Var(X) and for k = 3 we get the skewness of the
+    distribution, things may be more convenient this way.
+
+  - Let's use m<sub>r</sub> to the denote the population r-th moment. It
+    will be clear from context whether we mean the central or noncentral
+    moment.
 
   - Let's use k to denote the number of parameters in the given parametric
     family. For instance, k = 2 for the univariate normal family,
     corresponding to the two parameters &mu; and &sigma;^2. 
 
-  - Use &tau; to denote the population value of the parameter (it's a
-    vector if k > 1), and T to denote its sample estimate.
+  - Use &tau; to denote the population value of the parameter,  
+    and T to denote its sample estimate. Both are vectors if k > 1.
 
   - Consider first an example with k = 1, the 
     exponential distribution family:  
@@ -371,13 +376,29 @@ statistics](https://github.com/matloff/fastStat).
   - That gives T = 1/A, our Method of Moments estimate of &tau;. (By
     coincidence, it is also the MLE.)
 
+  - Note what happened when we set 1/T = A. The left-hand side is our
+    estimate of m<sub>1</sub> under the gamma model, while the
+    right-hand side is a general estimator of m<sub>1</sub>, not
+    assuming that model This is how the Method of Moments works; we will
+    have k such equations, then solve them for T.
+
   - For an example with k = 2, consider the *gamma distribution family*:
 
     c &tau;<sub>1</sub><sup>&tau;<sub>2</sub></sup>
-    t<sup>&tau;<sub>2 - 1</sup></sub>;</sup>
+    t<sup>&tau;<sub>2 </sub> - 1</sup></sup>
     exp(-&tau;<sub>1</sub>t)
 
-    
+    where c is a constant to make the density integrate to 1.0. This is
+    a common model used in network communications, medical survival
+    analysis for example.  Here
+
+    E(X) = &tau;<sub>2</sub> / &tau;<sub>1</sub>
+
+    and
+
+    Var(X) = &tau;<sub>2</sub> / &tau;<sub>1</sub>
+ 
+    The Method of Moments then sets 
 
 # Example: Linear Model, Part II 
 
