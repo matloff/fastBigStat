@@ -62,6 +62,22 @@ statistics](https://github.com/matloff/fastStat).
       D. Then W<sup>2</sup> = &Sigma;, and we can thus write 
       W = &Sigma;<sup>1/2</sup>.
 
+* Law of Iterated Expectation
+
+    - Let U and V be random quantities (scalars here, for convenience)
+      for which the expectations below exist. Then
+
+      E[ E(V|U ] = E(V)
+
+      Note that E(V|U) is treated as a random variable, which it in fact
+      is, since it is a function of U.
+
+    - Intuition: Suppose we wish to find the mean height of all UC Davis
+      students. We could ask each academic department to find the mean
+      height of their students, then average those mean heights. (Since
+      some departments are larger than others, that latter average is
+      weighted.)
+
 # The Multivariate Normal Distribution Family
 
 * Consider a random vector X = (X<sub>1</sub>,...,X<sub>p</sub>)'. The mean
@@ -90,7 +106,8 @@ statistics](https://github.com/matloff/fastStat).
 
 * Conditional distributions:  For simplicity, consider the conditional
   distribution of X<sub>i</sub> given X<sub>1</sub>,...,X<sub>j-1</sub>,
-  X<sub>j+1</sub>,...,X<sub>p</sub> = u.  Then:
+  X<sub>j+1</sub>,...,X<sub>p</sub> = u.  Then (inspiration for the
+  familiar linear model):
 
   - That distribution is normal.
 
@@ -98,11 +115,6 @@ statistics](https://github.com/matloff/fastStat).
     c'u for some c.
 
   - The variance of that distribution is constant in u.
-
-e.g. X<sub>2</sub> |
-  (X<sub>1</sub>,X<sub>3</sub>)' = t, are linear in the 
-  conditioning value t.  Also, conditional variances ( are constant in t.
-  (Source of the standard linear model.)
 
 * M = (X-&mu;)' &Sigma;<sup>-1</sup> (X-&mu;) has a chi-squared distribution
   with p degrees of freedom.
@@ -132,13 +144,15 @@ e.g. X<sub>2</sub> |
 
   - Normality: The distribution of Y | X = t is normal for all t.
 
-  - Heteroscedasticity: Var(Y | X = t) is the same for all t.
+  - Homoscedasticity: Var(Y | X = t) is the same for all t, which
+    we will denote by &sigma;<sup>2</sup>.
 
   - Independence: The random vectors (X<sub>1</sub>,Y<sub>1</sub>),...,
   (X<sub>n</sub>,Y<sub>n</sub>) are independent.
 
-  (Here we have the X<sub>i</sub> random. In many books, they are
-  fixed.)
+  Here we have the X<sub>i</sub> random. In many books, they are
+  fixed. We will switch back and forth, conditioning on the X<sub>i</sub>
+  at times (thus treating them as fixed).
 
 * One estmates &beta; from the data, using the formula for the estimates
   b = (b<sub>0</sub>, b<sub>1</sub>,...,b<sub>p</sub>)':
@@ -150,11 +164,59 @@ e.g. X<sub>2</sub> |
   values of Y.
 
 * The estimate vector b has an exact multivariate normal distribution
-  with mean &beta; and covariance matrix (A'A)<sup>-1</sup>. This
-  enables exact confidence intervals and tests. But we can use the
-  Central Limit Theorem to get approximate intervals and tests, as
-  follows. (Note: The notion of "exact" statistical inference is a myth.
-  No distribution in real life is exactly normal etc.)
+  with mean &beta; and covariance matrix 
+
+  &sigma;<sup>2</sup> (A'A)<sup>-1</sup>. 
+
+  Note that A is a function of the X data, but here we take it to be a
+  constant, by considering the conditional distribution of b given A.
+
+  Thus confidence intervals (CIs) and regions we obtain below are also
+  conditional. However, note that if, e.g. we have a conditional CI at
+  the 95% level, then the unconditional coverage probability is also
+  95%, by the Law of Iterated Expection above.
+
+* The unknown parameter &sigma;<sup>2</sup> must be estimated from the
+  data, as 
+
+  s<sup>2</sup> = [1/(n-p-1)] &Sigma;<sub>i</sub> 
+  (Y<sub>i</sub> - R<sub>i</sub> b)<sup>2</sup>
+
+  where R<sub>i</sub> is row i of A.
+
+* So the estimated conditional covariance matrix of b is
+
+   s<sup>2</sup> (A'A)<sup>-1</sup>
+
+* The stringent assumptions enable exact statistical inference.
+  This enables exact confidence intervals and tests. 
+
+  - The quantity b<sub>i</sub> - &beta;<sub>i</sub> has a t-distribution 
+    with n-p-1 df, thus setting up a CI for &beta;<sub>i</sub>. For large n, 
+    this is basically the N(0,1) distribution.
+
+  - In some cases, we may be interested in something like, say,
+
+    &beta;<sub>2</sub> - &beta;<sub>1</sub> = c'&beta;
+
+    where c = (0,1,-1,0,0,...,0)'. Since c'b will then have a univariate
+    normal distribution, we again can easily obtain a CI for the desired
+    quantity.
+
+  - The quantity 
+
+    (b-&beta;)'[s<sup>-2</sup> (A'A)] (b-&beta;)
+
+    has an F-distribution with (p+1,n-p-1) df, but again for large n,
+    this is approximately &chi;<sup>2</sup> with p+1 df. This sets up a
+    confidence ellipsoid for &beta;:
+
+    To form an approximate (1-&alpha;) 100% confidence ellipsoid for
+    &beta;, let q be the upper-&alpha; quantile of the &chi;<sup>2</sup>
+    with p+1 df. Then the confidence ellipsoid is the set of all t such
+    that 
+
+    (b-t)'[s<sup>-2</sup> (A'A)] (b-t) &le; q
 
 # Types of Convergence
 
@@ -181,7 +243,7 @@ e.g. X<sub>2</sub> |
 
   Then A<sub>n</sub> converges almost surely to &mu;.
 
-* If cdfs converge, i.e. for each t,
+* If cdfs of random variables converge, i.e. for each t,
 
    lim<sub>n &rarr; &infin;</sub> P(Q<sub>n</sub> &le; t) = P(Q &le; t) 
 
@@ -203,7 +265,7 @@ e.g. X<sub>2</sub> |
 
 * Slutsky Theorem (due to Russian mathematician Evgeny Slutsky). Say
   X<sub>n</sub> converges in distribution to X, and Y<sub>n</sub>
-  converges in probability to a constant c. The:
+  converges in probability to a constant c. Then:
 
     - (i) X<sub>n</sub> + Y<sub>n</sub> converges in distribution to X+c.
 
