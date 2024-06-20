@@ -7,8 +7,6 @@ A fast introduction to classical large-sample methods in statistics.
 See also [my fast introduction to
 statistics](https://github.com/matloff/fastStat).
 
-&mu;
-
 ## Prerequisites 
 
 * Calculus-based probability theory -- random variables, cdfs, density
@@ -42,7 +40,7 @@ statistics](https://github.com/matloff/fastStat).
       Cov(U,V) = E[(U-&alpha;)(V-&beta;)]
 
       Intuitively, if often when U is above its mean then V is also
-      above its mean, the the covariance will be positive, etc. It's
+      above its mean, then the covariance will be positive, etc. It's
       like correlation, and in fact the latter is
 
       &rho;(U,V) = Cov(U,V) / [sqrt(Var(U) sqrt(Var(V))]
@@ -59,14 +57,14 @@ statistics](https://github.com/matloff/fastStat).
 
     - Let &Sigma; be a covariance matrix. As a real, symmetric matrix,
       it can be diagonalized, i.e. &Sigma; = P D P' for an orthogonal
-      matrix O. Let W = PD<sup>1/2</sup>P', where the square root
+      matrix P. Let W = PD<sup>1/2</sup>P', where the square root
       matrix simply takes the square roots of the diagonal elements of
       D. Then W<sup>2</sup> = &Sigma;, and we can thus write 
       W = &Sigma;<sup>1/2</sup>.
 
 # The Multivariate Normal Distribution Family
 
-* Consider a random vector X = (X<sub>1</sub>,...,X<sub>p</sub>)'. Mean
+* Consider a random vector X = (X<sub>1</sub>,...,X<sub>p</sub>)'. The mean
   is now a vector &mu;, and standard deviation &sigma; now becomes the
   p x p covariance matrix &Sigma;.  Notation: N(&mu;,&Sigma;).
 
@@ -85,14 +83,25 @@ statistics](https://github.com/matloff/fastStat).
 
 * Every marginal distribution of X is also multivariate normal.
 
-* For constant matrix A as above, AX is also multivariate normal. In
+* For a constant m x p matrix A, AX is also multivariate normal. In
   particular, if m = 1, then AX is univariate normal; the converse is
   also true, i.e. if a'X is normal for all a, then X is multivariate
   normal.
 
-* Conditional distributions, e.g. X<sub>2</sub> |
+* Conditional distributions:  For simplicity, consider the conditional
+  distribution of X<sub>i</sub> given X<sub>1</sub>,...,X<sub>j-1</sub>,
+  X<sub>j+1</sub>,...,X<sub>p</sub> = u.  Then:
+
+  - That distribution is normal.
+
+  - The mean of that distribution is linear in u, i.e. of the form
+    c'u for some c.
+
+  - The variance of that distribution is constant in u.
+
+e.g. X<sub>2</sub> |
   (X<sub>1</sub>,X<sub>3</sub>)' = t, are linear in the 
-  conditioning value t.  Also, the variance is constant in t.
+  conditioning value t.  Also, conditional variances ( are constant in t.
   (Source of the standard linear model.)
 
 * M = (X-&mu;)' &Sigma;<sup>-1</sup> (X-&mu;) has a chi-squared distribution
@@ -107,6 +116,45 @@ statistics](https://github.com/matloff/fastStat).
   ellipses. For p > 2, the regions are p-dimensional ellipsoids. This
   can be used to derive confidence regions in statistical applications,
   as will be seen below.
+
+# Linear Model, Part I
+
+* Let Y be a random variable and X a p-dimensional random vector. The classic
+  assumptions of the model are as follows. Let t = 
+  (t<sub>1</sub>,...,t<sub>p</sub>)'. 
+
+  - Linearity: E(Y | X = t) = 
+  &beta;<sub>0</sub> + 
+  &beta;<sub>1</sub> t<sub>1</sub> + ... +
+  &beta;<sub>p</sub> t<sub>p</sub>. 
+  for some unknown constant vector &beta; = 
+  (&beta;<sub>0</sub>, &beta;<sub>1</sub>,..., &beta;<sub>p</sub>)'.
+
+  - Normality: The distribution of Y | X = t is normal for all t.
+
+  - Heteroscedasticity: Var(Y | X = t) is the same for all t.
+
+  - Independence: The random vectors (X<sub>1</sub>,Y<sub>1</sub>),...,
+  (X<sub>n</sub>,Y<sub>n</sub>) are independent.
+
+  (Here we have the X<sub>i</sub> random. In many books, they are
+  fixed.)
+
+* One estmates &beta; from the data, using the formula for the estimates
+  b = (b<sub>0</sub>, b<sub>1</sub>,...,b<sub>p</sub>)':
+
+  b = (A'A)<sup>-1</sup> A'W
+
+  where A is the n x (p+1) matrix will all 1s in column 1 and in column
+  j > 1, all n values of X<sub>j-1</sub>.  Here W is the vector of all n
+  values of Y.
+
+* The estimate vector b has an exact multivariate normal distribution
+  with mean &beta; and covariance matrix (A'A)<sup>-1</sup>. This
+  enables exact confidence intervals and tests. But we can use the
+  Central Limit Theorem to get approximate intervals and tests, as
+  follows. (Note: The notion of "exact" statistical inference is a myth.
+  No distribution in real life is exactly normal etc.)
 
 # Types of Convergence
 
@@ -196,43 +244,6 @@ statistics](https://github.com/matloff/fastStat).
   the Cramer-Wold device.
 
 # Example: Linear Model with Fewer Assumptions
-
-* Let Y be a random variable and X a p-dimensional random vector. The classic
-  assumptions of the model are as follows. Let t = 
-  (t<sub>1</sub>,...,t<sub>p</sub>)'. 
-
-  - Linearity: E(Y | X = t) = 
-  &beta;<sub>0</sub> + 
-  &beta;<sub>1</sub> t<sub>1</sub> + ... +
-  &beta;<sub>p</sub> t<sub>p</sub>. 
-  for some unknown constant vector &beta; = 
-  (&beta;<sub>0</sub>, &beta;<sub>1</sub>+...+ &beta;<sub>p</sub>)'.
-
-  - Normality: The distribution of Y | X = t is normal for all t.
-
-  - Heteroscedasticity: Var(Y | X = t) is the same for all t.
-
-  - Independence: The random vectors (X<sub>1</sub>,Y<sub>1</sub>),...,
-  (X<sub>n</sub>,Y<sub>n</sub>) are independent.
-
-  (Here we have the X<sub>i</sub> random. In many books, they are
-  fixed.)
-
-* One estmates &beta; from the data, using the formula for the estimates
-  b = (b<sub>0</sub>, b<sub>1</sub>,...,b<sub>p</sub>)':
-
-  b = (A'A)<sup>-1</sup> A'W
-
-  where A is the n x (p+1) matrix will all 1s in column 1 and in column
-  j > 1, all n values of X<sub>j-1</sub>.  Here W is the vector of all n
-  values of Y.
-
-* The estimate vector b has an exact multivariate normal distribution
-  with mean &beta; and covariance matrix (A'A)<sup>-1</sup>. This
-  enables exact confidence intervals and tests. But we can use the
-  Central Limit Theorem to get approximate intervals and tests, as
-  follows. (Note: The notion of "exact" statistical inference is a myth.
-  No distribution in real life is exactly normal etc.)
 
 * To make things a little simpler to explain, we'll look at the
   non-intercept model, in which E(X) is 0 and   
