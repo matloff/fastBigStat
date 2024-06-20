@@ -129,7 +129,7 @@ statistics](https://github.com/matloff/fastStat).
   can be used to derive confidence regions in statistical applications,
   as will be seen below.
 
-# Linear Model, Part I
+# Example: Linear Model, Part I
 
 * Let Y be a random variable and X a p-dimensional random vector. The classic
   assumptions of the model are as follows. Let t = 
@@ -305,7 +305,9 @@ statistics](https://github.com/matloff/fastStat).
   converges in distribution to  N(0,I). This can easily be proved using
   the Cramer-Wold device.
 
-# Example: Linear Model with Fewer Assumptions
+# Example: Method of Moments
+
+# Example: Linear Model, Part II 
 
 * To make things a little simpler to explain, we'll look at the
   non-intercept model, in which E(X) is 0 and   
