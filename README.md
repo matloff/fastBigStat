@@ -1,11 +1,12 @@
 
 # fastBigStat
 
-Author: Norm Matloff, UC Davis
-
-A fast introduction to classical large-sample methods in statistics.
-See also [my fast introduction to
+A fast introduction to classical large-sample methods in statistics,
+focusing on multivariate normality.  See also [my fast introduction to
 statistics](https://github.com/matloff/fastStat).
+
+Author: Norm Matloff, UC Davis; 
+[bio](http://heather.cs.ucdavis.edu/matloff.html)
 
 ## Prerequisites 
 
@@ -29,8 +30,8 @@ statistics](https://github.com/matloff/fastStat).
 * Consider a random vector X = (X<sub>1</sub>,...,X<sub>p</sub>)', 
   and a constant m x p matrix A.
 
-* E(AX) = A E(X).  Note that these are vector, i.e. componentwise
-  means.
+* E(AX) = A E(X).  Note that these are vector/matrix quantities, i.e.
+  componentwise means.
 
 * Covariance
 
@@ -57,10 +58,10 @@ statistics](https://github.com/matloff/fastStat).
 
     - Let &Sigma; be a covariance matrix. As a real, symmetric matrix,
       it can be diagonalized, i.e. &Sigma; = P D P' for an orthogonal
-      matrix P. Let W = PD<sup>1/2</sup>P', where the square root
-      matrix simply takes the square roots of the diagonal elements of
-      D. Then W<sup>2</sup> = &Sigma;, and we can thus write 
-      W = &Sigma;<sup>1/2</sup>.
+      matrix P and diagonal matrix D. Let W = PD<sup>1/2</sup>P', where
+      the square root matrix simply takes the square roots of the
+      diagonal elements of D. Then W<sup>2</sup> = &Sigma;, and we can
+      thus write W = &Sigma;<sup>1/2</sup>.
 
 * Law of Iterated Expectation
 
@@ -97,10 +98,10 @@ statistics](https://github.com/matloff/fastStat).
 
       The sample mean
 
-    (1/n) (W<sub>1</sub>+...+W<sub>n</sub>)
+      (1/n) (W<sub>1</sub>+...+W<sub>n</sub>)
 
-    is viewed as an estimate of the population mean E(W), where W has
-    the distribution, and so on. 
+      is viewed as an estimate of the population mean E(W), where W has
+      the distribution of the popuulation, and so on. 
 
 # The Multivariate Normal Distribution Family
 
@@ -129,16 +130,16 @@ statistics](https://github.com/matloff/fastStat).
   normal.
 
 * Conditional distributions:  For simplicity, consider the conditional
-  distribution of X<sub>i</sub> given X<sub>1</sub>,...,X<sub>j-1</sub>,
-  X<sub>j+1</sub>,...,X<sub>p</sub> = u.  Then (inspiration for the
+  distribution of X<sub>i</sub> given (X<sub>1</sub>,...,X<sub>j-1</sub>,
+  X<sub>j+1</sub>,...,X<sub>p</sub>) = w.  Then (inspiration for the
   familiar linear model):
 
   - That distribution is normal.
 
-  - The mean of that distribution is linear in u, i.e. of the form
-    c'u for some c.
+  - The mean of that distribution is linear in w, i.e. of the form
+    c'w for some c.
 
-  - The variance of that distribution is constant in u.
+  - The variance of that distribution is constant in w.
 
 * The *quadratic form* M = (X-&mu;)' &Sigma;<sup>-1</sup> (X-&mu;) has a 
   chi-squared distribution with p degrees of freedom.
@@ -155,8 +156,12 @@ statistics](https://github.com/matloff/fastStat).
 
 # Example: Linear Model, Part I
 
-* Let Y be a random variable and X a p-dimensional random vector. The classic
-  assumptions of the model are as follows. Let t = 
+* Let Y be a random variable and X =
+  (X<sub>1</sub>,...,X<sub>p</sub>)' a p-dimensional random vector. E.g.
+  we might wish to predict Y = college GPA from X<sub>1</sub> = high
+  school GPA, X<sub>2</sub> = SAT score and so on.
+
+  The classic assumptions of the model are as follows. Let t =
   (t<sub>1</sub>,...,t<sub>p</sub>)'. 
 
   - Linearity: E(Y | X = t) = 
@@ -212,12 +217,13 @@ statistics](https://github.com/matloff/fastStat).
 
    s<sup>2</sup> (A'A)<sup>-1</sup>
 
-* The stringent assumptions enable exact statistical inference.
+* The stringent assumptions above enable exact statistical inference.
   This enables exact confidence intervals and tests. 
 
-  - The quantity b<sub>i</sub> - &beta;<sub>i</sub> has a t-distribution 
-    with n-p-1 df, thus setting up a CI for &beta;<sub>i</sub>. For large n, 
-    this is basically the N(0,1) distribution.
+  - The quantity b<sub>i</sub> - &beta;<sub>i</sub> has a Student
+    t-distribution with n-p-1 df, thus setting up a CI for
+    &beta;<sub>i</sub>. For large n, Student t is basically the N(0,1)
+    distribution.
 
   - In some cases, we may be interested in something like, say,
 
@@ -225,7 +231,9 @@ statistics](https://github.com/matloff/fastStat).
 
     where c = (0,1,-1,0,0,...,0)'. Since c'b will then have a univariate
     normal distribution, we again can easily obtain a CI for the desired
-    quantity.
+    quantity. Note that we need the estimated variance of c'b, which is
+    
+    s<sup>2</sup> c'(A'A)<sup>-1</sup>c
 
   - The quantity 
 
@@ -238,8 +246,8 @@ statistics](https://github.com/matloff/fastStat).
 
     To form an approximate (1-&alpha;) 100% confidence ellipsoid for
     &beta;, let q be the upper-&alpha; quantile of the &chi;<sup>2</sup>
-    with p+1 df. Then the confidence ellipsoid is the set of all t such
-    that 
+    distribution with p+1 df. Then the confidence ellipsoid is the set
+    of all t such that 
 
     (b-t)'[s<sup>-2</sup> (A'A)] (b-t) &le; q
 
@@ -250,7 +258,7 @@ statistics](https://github.com/matloff/fastStat).
 
   lim<sub>n &rarr; &infin;</sub> P(|V<sub>n</sub> - V| > &epsilon;) = 0
  
-* For random vectors V<sup>i</sup>, replace | | by, e.g. Euclidean
+* For random vectors V<sub>i</sub>, replace | | by, e.g. Euclidean
   distance.
 
 * Say we have random variables Q<sub>n</sub>, not necessarily iid. If
@@ -265,7 +273,7 @@ statistics](https://github.com/matloff/fastStat).
   iid with mean &mu;, then the sample average converges to the
   distributional average: Set
 
-  A<sub>n</sub> = (1/n) (V<sub>1</sub>+...+V<sub>n</sub>)
+  A<sub>n</sub> = (1/n) (Q<sub>1</sub>+...+Q<sub>n</sub>)
 
   Then A<sub>n</sub> converges almost surely to &mu;.
 
@@ -286,7 +294,7 @@ statistics](https://github.com/matloff/fastStat).
 * That definition is hard to deal with, but the Cramer-Wold device often
   makes things easy: Consider a sequence of random vectors X<sub>n</sub>
   and another random vector X. Then X<sub>n</sub> converges in
-  distribution to X if and only if for any p-vector c, c'X<sub>n</sub>
+  distribution to X if and only if for all p-vectors c, c'X<sub>n</sub>
   converges in distribution to c'X.
 
 * Slutsky Theorem (due to Russian mathematician Evgeny Slutsky). Say
@@ -317,11 +325,15 @@ statistics](https://github.com/matloff/fastStat).
   Many generalizations of the CLT exist, in which they relax the iid
   assmuption.
 
-* Note that while scaling by the factor n<sup>1/2</sup> is what works in
-  this context of sums, other rates may apply for other quantities. For
+* Scaling by the factor n<sup>1/2</sup> is "just right" to make things
+  work here. If, say we were to divide instead by n, the quantity would
+  go to 0, by the SLLN. That certainly would not be helpful in terms of
+  finding probabilities, confidence intervals and so on.
+
+  Other powers may apply for other quantities. For
   example, if we are interested in the maximum of
   X<sub>1</sub>,...,X<sub>n</sub> rather than their sum, then 
-  we may divide by (2 log n)<sup>1/2</sup> (and the limiting 
+  we divide by (2 log n)<sup>1/2</sup> (and the limiting 
   distribution will be something other than normal).
 
 * Multivariate Central Limit Theorem: Let X<sub>i</sub>, i = 1,2,... be
@@ -496,11 +508,26 @@ requested.
     To compute a CI, we replace the quantities by their sample analogs.
     E.g. our estimate of Var(M<sub>1</sub>) is
 
-    (1/n) &Sigma;<sub>i=1</sub><sup>n</sup> 
+    s<sup>2</sup>= (1/n) &Sigma;<sub>i=1</sub><sup>n</sup> 
     [X<sub>i</sub> - M<sub>1</sub>]<sup>2</sup>
 
     (Divide by n-1 instead of n if you prefer, though there really is no
     reason to do so.)
+
+    Our estimate of g<sub>1</sub>(&tau;) is 
+
+    g<sub>1</sub>(t) = -1/T<sup>2</sup>
+
+    Our CI, say for a 95% confidence level, is then 
+
+    T &plusmn; 1.96 s/T<sup>2</sup>
+
+    For the case k = 2, we have two functions, g and h, corresponding to
+    M<sub>1</sub> and M<sub>2</sub>, both with arguments T<sub>1</sub>
+    and T<sub>2</sub>. We now have derivatives g<sub>1</sub> and
+    h<sub>1</sub>, but they are now gradients.  The Multivariate CLT is
+    applied and so on.
+
 
 
 # Example: Linear Model, Part II 
