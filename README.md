@@ -460,10 +460,10 @@ requested.
     example above. Then E(X) is some function of &tau;. In the
     exponential example, g(&tau;) = 1/&tau;.
 
-    Assume g is differentiable with a continuous derivative h. Then
+    Assume g is differentiable with a continuous derivative g<sub>1</sub>. Then
     Taylor's Theorem from calculus says
 
-    g(T) = g(&tau;) + h(T<sub>betw</sub>) (T - &tau;)
+    g(T) = g(&tau;) + g<sub>1</sub>(T<sub>betw</sub>) (T - &tau;)
 
     for some T<sub>betw</sub> between &tau; and T. 
 
@@ -475,7 +475,33 @@ requested.
 
     n<sup>0.5</sup>(M<sub>1</sub> - m<sub>1</sub>) =
     n<sup>0.5</sup> [g(T) - g(&tau;)] =
-    n<sup>0.5</sup> [h(T<sub>betw</sub>) (T - &tau;)]
+    n<sup>0.5</sup> [g<sub>1</sub>(T<sub>betw</sub>) (T - &tau;)]
+
+    and then
+
+    n<sup>0.5</sup>(T - &tau;) =
+    n<sup>0.5</sup> (M<sub>1</sub> - m<sub>1</sub>)/ 
+    g<sub>1</sub>(T<sub>betw</sub>)
+
+ -  We know that T is a consistent estimator of &tau;, so by the
+    continuity of g<sub>1</sub>, the denominator in the RHS converges
+    almost surely to g<sub>1</sub>(&tau;). Applying the Slutsky Theorem
+    and the CLT (M<sub>1</sub> is a sum of iid terms), we see that the
+    RSH is asymptotically normal.
+
+  - The variance in that asymptotically normal distribution will be
+
+    Var(M<sub>1</sub>/[g<sub>1</sub>(&tau;)]<sup>2</sup>
+
+    To compute a CI, we replace the quantities by their sample analogs.
+    E.g. our estimate of Var(M<sub>1</sub>) is
+
+    (1/n) &Sigma;<sub>i=1</sub><sup>n</sup> 
+    [X<sub>i</sub> - M<sub>1</sub>]<sup>2</sup>
+
+    (Divide by n-1 instead of n if you prefer, though there really is no
+    reason to do so.)
+
 
 # Example: Linear Model, Part II 
 
