@@ -258,7 +258,8 @@ statistics](https://github.com/matloff/fastStat).
 
   P(lim<sub>n &rarr; &infin;</sub> Q<sub>n</sub> = c) = 1
 
-  then we say Q<sub>n</sub> converges *almost surely* to c.
+  then we say Q<sub>n</sub> converges *almost surely* to c. (The term
+  "almost surely" is just a fancy way of saying, "With probability 1.")
 
 * Example: the Strong Law of Large Numbers (SLLN). If the Q<sub>n</sub> are
   iid with mean &mu;, then the sample average converges to the
@@ -433,33 +434,38 @@ requested.
 
 * Consistency
 
-  - Say we have an estimator &theta;<sub>n</sub> for a parameter &theat;
+  - Say we have an estimator &theta;<sub>n</sub> for a parameter &theta;
     based on a sample of size n. As n goes to &infin;, we would like our
     estimator to have the property that &theta;<sub>n</sub> goes to
     &theta;. If it does almost surely, we say it is *strongly consistent*; if 
     the convergence is in probability, it is known as *weak
     consistency*.
 
-    Since the SLLN implies that M<sub>i</sub> is strongly consistent for 
-    m<sub>i</sub>, this implies the same, as long as the moments are
-    continuous functions of the M<sub>i</sub>.
+    Since the SLLN implies that M<sub>i</sub> is strongly consistent for
+    m<sub>i</sub>, this implies the same for the T<sub>i</sub>, as long
+    as the moments are continuous functions of the M<sub>i</sub>.  In
+    the example above, for instance, M<sub>1</sub> and M<sub>2</sub>
+    converge almost surely, hence the T<sub>i</sub> do too.
 
 * Asymptotic normality
 
-  - Excellent. We now have estimators for &tau;<sub>1</sub> and
-    &tau;<sub>2</sub>. But it would be nice to get confidence intervals
-    for them. For this we need asymptotic normality, as follows.
+  - OK, we now have estimators for &tau;<sub>1</sub> and
+    &tau;<sub>2</sub>, and they are consistent. But the latter is a very
+    weak property. For good practical value, it would be desirable to
+    obtain confidence intervals from them. For this we need asymptotic
+    normality, as follows.
 
   - For simplicity, let's consider the case k = 1, so the density family
     has a single scalar parameter, &tau;, as we saw in the exponential
-    example above. Then E(X) is some function of &tau;, g(&tau;).
+    example above. Then E(X) is some function of &tau;. In the
+    exponential example, g(&tau;) = 1/&tau;.
 
     Assume g is differentiable with a continuous derivative h. Then
     Taylor's Theorem from calculus says
 
-    g(T) = g(&tau;) + h(T<sub>mid</sub>) (T - &tau;)
+    g(T) = g(&tau;) + h(T<sub>betw</sub>) (T - &tau;)
 
-    for some T<sub>mid</sub> between &tau; and T. 
+    for some T<sub>betw</sub> between &tau; and T. 
 
   - Now to set up using the CLT, recall that we will set
 
@@ -469,7 +475,7 @@ requested.
 
     n<sup>0.5</sup>(M<sub>1</sub> - m<sub>1</sub>) =
     n<sup>0.5</sup> [g(T) - g(&tau;)] =
-    n<sup>0.5</sup> [h(T<sub>mid</sub>) (T - &tau;)]
+    n<sup>0.5</sup> [h(T<sub>betw</sub>) (T - &tau;)]
 
 # Example: Linear Model, Part II 
 
