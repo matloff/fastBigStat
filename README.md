@@ -313,6 +313,9 @@ statistics](https://github.com/matloff/fastStat).
 
   converges in distribution to N(0,1).
 
+  Many generalizations of the CLT exist, in which they relax the iid
+  assmuption.
+
 * Note that while scaling by the factor n<sup>1/2</sup> is what works in
   this context of sums, other rates may apply for other quantities. For
   example, if we are interested in the maximum of
@@ -330,7 +333,15 @@ statistics](https://github.com/matloff/fastStat).
   converges in distribution to  N(0,I). This can easily be proved using
   the Cramer-Wold device.
 
-# Example: Method of Moments
+# Examples of Asymptotic Normality 
+
+We will show two applications of the above material. Both are serious
+applications, and thus rather involved. The reader's patience is
+requested.
+
+# Example: Method of Moments (MM) Estimators
+
+* Background on MM estimators
 
   - Suppose we are modeling some random variable with some parametric
     distribution family, such as normal, exonential or gamma. We want to
@@ -338,16 +349,17 @@ statistics](https://github.com/matloff/fastStat).
     X<sub>1</sub>,...,X<sub>n</sub>. How can we do this?
 
   - The most famous general method is *Maximum Likelihood Estimation*
-    (MLE), but it's somewhat less-famous cousin, the *Method of Moments*,
-    is sometimes the handier one. (It is also the easier one to
+    (MLE), but it's somewhat less-famous cousin, the *Method of Moments* 
+    (MM), is sometimes the handier one. (It is also the easier one to
     explain.)
 
   - The r-th *moment* of a random variable X is defined to be
-    E(X<sup>r</sup>), r = 1,2,.... Its natural sample estimate is 
+    E(X<sup>r</sup>), r = 1,2,.... Note that this is a population value;
+    its natural sample estimate is 
 
-    A = (1/n) (X<sub>1</sub>+...+X<sub>n</sub>)
+    M<sub>r =</sub>(1/n) (X<sub>1</sub><sup>r</sup>+...+X<sub>n</sub><sup>r</sup>)
 
-  - Alternatively, for k > 1 one may use the r-th central moment, 
+  - Alternatively, for k > 1 one may use the r-th *central* moment, 
 
     E[(X-E(X))<sup>r</sup>]
 
@@ -356,31 +368,32 @@ statistics](https://github.com/matloff/fastStat).
 
   - Let's use m<sub>r</sub> to the denote the population r-th moment. It
     will be clear from context whether we mean the central or noncentral
-    moment.
+    moment. The same statement applies to M<sub>r</sub> above.
 
   - Let's use k to denote the number of parameters in the given parametric
     family. For instance, k = 2 for the univariate normal family,
-    corresponding to the two parameters &mu; and &sigma;^2. 
+    corresponding to the two parameters &mu; and &sigma;<sup>2</sup>. 
 
-  - Use &tau; to denote the population value of the parameter,  
-    and T to denote its sample estimate. Both are vectors if k > 1.
+  - Use &tau; to denote the population value of the parameter, and T to 
+    denote its sample estimate under MM.  Both are vectors if k > 1.
 
   - Consider first an example with k = 1, the 
-    exponential distribution family:  
+    exponential distribution family, with density  
 
     &tau; exp(-&tau;t).
 
-    The mean of this dtr is 1/&tau;, which would be estimated by 1/T. So
-    set this estimated population mean to the sample mean A: 1/T = A. 
+    The mean of this distribution is 1/&tau;, which would be estimated by 
+    1/T. So set this estimated population mean to the sample mean 
+    M<sub>1</sub>: 1/T = M<sub>1</sub>. 
 
-  - That gives T = 1/A, our Method of Moments estimate of &tau;. (By
-    coincidence, it is also the MLE.)
+  - That gives T = 1/M<sub>1</sub>, our Method of Moments estimate of 
+    &tau;. (By coincidence, it is also the MLE.)
 
   - Note what happened when we set 1/T = A. The left-hand side is our
     estimate of m<sub>1</sub> under the gamma model, while the
     right-hand side is a general estimator of m<sub>1</sub>, not
-    assuming that model This is how the Method of Moments works; we will
-    have k such equations, then solve them for T.
+    assuming that model This is how the Method of Moments works, by 
+    matching the two. We  will have k such equations, then solve them for T.
 
   - For an example with k = 2, consider the *gamma distribution family*:
 
@@ -389,16 +402,74 @@ statistics](https://github.com/matloff/fastStat).
     exp(-&tau;<sub>1</sub>t)
 
     where c is a constant to make the density integrate to 1.0. This is
-    a common model used in network communications, medical survival
+    a common model used in network communications and medical survival
     analysis for example.  Here
 
     E(X) = &tau;<sub>2</sub> / &tau;<sub>1</sub>
 
     and
 
-    Var(X) = &tau;<sub>2</sub> / &tau;<sub>1</sub>
- 
-    The Method of Moments then sets 
+    Var(X) = &tau;<sub>2</sub> / &tau;<sub>1</sub><sup>2</sup>
+
+  - So, we equate:
+
+    M<sub>1</sub> = T<sub>2</sub> / T<sub>1</sub>
+
+    and (using the central moment for M<sub>2</sub>)
+
+    M<sub>2</sub> = T<sub>2</sub> / T<sub>1</sub><sup>2</sup>
+
+  - These are nonlinear equations, but we are lucky here; they are
+    solvable from simple algebra (otherwise we would need to use
+    numerical approximation methods):
+
+    T<sub>1</sub> = M<sub>1</sub> / M<sub>2</sub>
+
+    and
+
+    T<sub>2</sub> = M<sub>1</sub> T<sub>1</sub> =
+    M<sub>1</sub><sup>2</sup> / M<sub>2</sub>
+
+
+* Consistency
+
+  - Say we have an estimator &theta;<sub>n</sub> for a parameter &theat;
+    based on a sample of size n. As n goes to &infin;, we would like our
+    estimator to have the property that &theta;<sub>n</sub> goes to
+    &theta;. If it does almost surely, we say it is *strongly consistent*; if 
+    the convergence is in probability, it is known as *weak
+    consistency*.
+
+    Since the SLLN implies that M<sub>i</sub> is strongly consistent for 
+    m<sub>i</sub>, this implies the same, as long as the moments are
+    continuous functions of the M<sub>i</sub>.
+
+* Asymptotic normality
+
+  - Excellent. We now have estimators for &tau;<sub>1</sub> and
+    &tau;<sub>2</sub>. But it would be nice to get confidence intervals
+    for them. For this we need asymptotic normality, as follows.
+
+  - For simplicity, let's consider the case k = 1, so the density family
+    has a single scalar parameter, &tau;, as we saw in the exponential
+    example above. Then E(X) is some function of &tau;, g(&tau;).
+
+    Assume g is differentiable with a continuous derivative h. Then
+    Taylor's Theorem from calculus says
+
+    g(T) = g(&tau;) + h(T<sub>mid</sub>) (T - &tau;)
+
+    for some T<sub>mid</sub> between &tau; and T. 
+
+  - Now to set up using the CLT, recall that we will set
+
+    g(T) = M<sub>1</sub>
+
+    Then rewrite the earlier equation as
+
+    n<sup>0.5</sup>(M<sub>1</sub> - m<sub>1</sub>) =
+    n<sup>0.5</sup> [g(T) - g(&tau;)] =
+    n<sup>0.5</sup> [h(T<sub>mid</sub>) (T - &tau;)]
 
 # Example: Linear Model, Part II 
 
