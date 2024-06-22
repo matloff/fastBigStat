@@ -341,9 +341,9 @@ Author: Norm Matloff, UC Davis;
   Define T<sub>n</sub> = X<sub>1</sub>+...+X<sub>n</sub>, which has mean
   and covariance matrix n &mu; and n &Sigma;. Then 
 
-    1/n<sup>1/2</sup> &Sigma;<sup>-1/2</sup> (T<sub>n</sub> - n &mu;)
+    1/n<sup>1/2</sup> (T<sub>n</sub> - n &mu;)
 
-  converges in distribution to  N(0,I). This can easily be proved using
+  converges in distribution to  N(0,&Sigma;). This can easily be proved using
   the Cramer-Wold device.
 
 # Examples of Asymptotic Normality 
@@ -356,7 +356,7 @@ requested.
 
 * Background on MM estimators
 
-  - Suppose we are modeling some random variable with some parametric
+  - Suppose we are modeling a random variable with some parametric
     distribution family, such as normal, exonential or gamma. We want to
     estimate the parameter(s) from our data
     X<sub>1</sub>,...,X<sub>n</sub>. How can we do this?
@@ -366,47 +366,64 @@ requested.
     (MM), is sometimes the handier one. (It is also the easier one to
     explain.)
 
-  - The r-th *moment* of a random variable X is defined to be
-    E(X<sup>r</sup>), r = 1,2,.... Note that this is a population value;
-    its natural sample estimate is 
+  - This is best introduced by example. Say we are modeling our
+    X<sup>i</sup> as having an exponential distribution, i.e. they have
+    density
 
-    M<sub>r =</sub>(1/n) (X<sub>1</sub><sup>r</sup>+...+X<sub>n</sub><sup>r</sup>)
+    &tau; exp(-&tau;t).
+
+    for some unknown parameter &tau;.  How do we construct the MM
+    estimate T of &tau;?
+
+    The mean of this distribution is 1/&tau;, which would be estimated by 
+    1/T. On the other hand, the classical estimate of a population mean
+    is the sample mean,
+
+    X<sub>bar</sub> = X<sub>1</sub>,...,X<sub>n</sub>. So set our
+    estimated mean under the exponential assumption, 1/T, to our general
+    estimated mean, without that assmuption:
+
+    1/T = X<sub>bar</sub>
+
+    That gives us our MM estimate,
+
+    T = 1/X<sub>bar</sub>
+
+  - How does MM work in general, when we have more than one parameter?
+    Let's use k to denote the number of parameters in the given parametric
+    family. For instance, k = 2 for the univariate normal family,
+    corresponding to the two parameters &mu; and &sigma;<sup>2</sup>. We
+    then must bring in E(X<sup>2</sup>) and so on, as follows.
+
+  - The r-th *moment* of a random variable X is defined to be
+    m<sub>r</sub> = E(X<sup>r</sup>), r = 1,2,....  We will need to use
+    the first k moments.
+
+    Note that this is a population value;
+    its intuitive sample estimate is 
+
+    M<sub>r</sub> = 
+    (1/n) (X<sub>1</sub><sup>r</sup>+...+X<sub>n</sub><sup>r</sup>)
 
   - Alternatively, for k > 1 one may use the r-th *central* moment, 
 
     E[(X-E(X))<sup>r</sup>]
 
-    Since for k = 2 this is Var(X) and for k = 3 we get the skewness of the
+    Since for r = 2 this is Var(X) and for r = 3 we get the skewness of the
     distribution, things may be more convenient this way.
 
-  - Let's use m<sub>r</sub> to the denote the population r-th moment. It
-    will be clear from context whether we mean the central or noncentral
-    moment. The same statement applies to M<sub>r</sub> above.
-
-  - Let's use k to denote the number of parameters in the given parametric
-    family. For instance, k = 2 for the univariate normal family,
-    corresponding to the two parameters &mu; and &sigma;<sup>2</sup>. 
+    It will be clear from context whether we mean the central or noncentral
+    moment. 
 
   - Use &tau; to denote the population value of the parameter, and T to 
     denote its sample estimate under MM.  Both are vectors if k > 1.
 
-  - Consider first an example with k = 1, the 
-    exponential distribution family, with density  
-
-    &tau; exp(-&tau;t).
-
-    The mean of this distribution is 1/&tau;, which would be estimated by 
-    1/T. So set this estimated population mean to the sample mean 
-    M<sub>1</sub>: 1/T = M<sub>1</sub>. 
-
-  - That gives T = 1/M<sub>1</sub>, our Method of Moments estimate of 
-    &tau;. (By coincidence, it is also the MLE.)
-
-  - Note what happened when we set 1/T = A. The left-hand side is our
-    estimate of m<sub>1</sub> under the gamma model, while the
-    right-hand side is a general estimator of m<sub>1</sub>, not
-    assuming that model This is how the Method of Moments works, by 
-    matching the two. We  will have k such equations, then solve them for T.
+  - Before continuing, note again what happened when we set 1/T = A
+    above..  The left-hand side is our estimate of m<sub>1</sub> under
+    the exponential model, while the right-hand side is a general
+    estimator of m<sub>1</sub>, not assuming that model This is how the
+    Method of Moments works, by matching the two. We  will have k such
+    equations, then solve them for T.
 
   - For an example with k = 2, consider the *gamma distribution family*:
 
@@ -450,7 +467,7 @@ requested.
     based on a sample of size n. As n goes to &infin;, we would like our
     estimator to have the property that &theta;<sub>n</sub> goes to
     &theta;. If it does almost surely, we say it is *strongly consistent*; if 
-    the convergence is in probability, it is known as *weak
+    the convergence is just in probability, it is known as *weak
     consistency*.
 
     Since the SLLN implies that M<sub>i</sub> is strongly consistent for
@@ -469,7 +486,7 @@ requested.
 
   - For simplicity, let's consider the case k = 1, so the density family
     has a single scalar parameter, &tau;, as we saw in the exponential
-    example above. Then E(X) is some function of &tau;. In the
+    example above. Then E(X) is some function g(&tau;). In the
     exponential example, g(&tau;) = 1/&tau;.
 
     Assume g is differentiable with a continuous derivative g<sub>1</sub>. Then
@@ -495,17 +512,18 @@ requested.
     n<sup>0.5</sup> (M<sub>1</sub> - m<sub>1</sub>)/ 
     g<sub>1</sub>(T<sub>betw</sub>)
 
- -  We know that T is a consistent estimator of &tau;, so by the
-    continuity of g<sub>1</sub>, the denominator in the RHS converges
-    almost surely to g<sub>1</sub>(&tau;). Applying the Slutsky Theorem
-    and the CLT (M<sub>1</sub> is a sum of iid terms), we see that the
-    RSH is asymptotically normal.
+ -  We know that T is a strongly consistent estimator of &tau;, so by
+    the continuity of g<sub>1</sub>, the denominator in the RHS
+    converges almost surely to g<sub>1</sub>(&tau;). Applying the
+    Slutsky Theorem and the CLT (M<sub>1</sub> is a sum of iid terms),
+    we see that the RSH is asymptotically normal (though not with
+    standard deviation 1).
 
-  - The variance in that asymptotically normal distribution will be
+    The variance in that asymptotically normal distribution will be
 
     Var(M<sub>1</sub>/[g<sub>1</sub>(&tau;)]<sup>2</sup>
 
-    To compute a CI, we replace the quantities by their sample analogs.
+  - To compute a CI, we replace the quantities by their sample analogs.
     E.g. our estimate of Var(M<sub>1</sub>) is
 
     s<sup>2</sup>= (1/n) &Sigma;<sub>i=1</sub><sup>n</sup> 
@@ -516,14 +534,14 @@ requested.
 
     Our estimate of g<sub>1</sub>(&tau;) is 
 
-    g<sub>1</sub>(t) = -1/T<sup>2</sup>
+    g<sub>1</sub>(T) = -1/T<sup>2</sup>
 
     Our CI, say for a 95% confidence level, is then 
 
     T &plusmn; 1.96 s/T<sup>2</sup>
 
-    For the case k = 2, we have two functions, g and h, corresponding to
-    M<sub>1</sub> and M<sub>2</sub>, both with arguments T<sub>1</sub>
+  - For the case k = 2, we have two functions, g and h, corresponding to
+    M<sub>1</sub> and M<sub>2</sub>, both having arguments T<sub>1</sub>
     and T<sub>2</sub>. We now have derivatives g<sub>1</sub> and
     h<sub>1</sub>, but they are now gradients.  The Multivariate CLT is
     applied and so on.
