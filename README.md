@@ -253,6 +253,11 @@ Author: Norm Matloff, UC Davis;
     
     s<sup>2</sup> c'(A'A)<sup>-1</sup>c
 
+    So for large n, a 95% confidence interval for 
+     &beta;<sub>2</sub> - &beta;<sub>1</sub> is 
+
+    c'b &plusmn; 1.96 [s<sup>2</sup> c'(A'A)<sup>-1</sup>c]<sup>0.5</sup>
+
   - The quantity 
 
     (b-&beta;)'[s<sup>-2</sup> (A'A)] (b-&beta;)
@@ -300,7 +305,8 @@ Author: Norm Matloff, UC Davis;
    lim<sub>n &rarr; &infin;</sub> P(Q<sub>n</sub> &le; t) = P(Q &le; t) 
 
   for some random variable Q, we say Q<sub>n</sub> converges *in
-  distribution* to Q.
+  distribution* to Q. Sometimes people omit mention of Q, simply
+  referring to its distribution.
 
 * Some types of convergence imply others:
 
