@@ -1,8 +1,9 @@
 
 # fastBigStat
 
-A fast introduction to classical large-sample methods in statistics,
-focusing on multivariate normality.  See also [my fast introduction to
+A fast introduction to asymptotoic normality of statistical estimators.
+Includes the necessary material on multivariate distributions.  See also
+[my fast introduction to
 statistics](https://github.com/matloff/fastStat).
 
 Author: Norm Matloff, UC Davis; 
@@ -42,7 +43,8 @@ Author: Norm Matloff, UC Davis;
 
       Intuitively, if often when U is above its mean then V is also
       above its mean, then the covariance will be positive, etc. It's
-      like correlation, and in fact the latter is
+      like correlation, and in fact the latter is a scaled version of
+      covariance,
 
       &rho;(U,V) = Cov(U,V) / [sqrt(Var(U) sqrt(Var(V))]
 
@@ -51,7 +53,7 @@ Author: Norm Matloff, UC Davis;
       matrix with (i,j) element Cov(X<sub>i</sub>,X<sub>j</sub>),
       which reduces to Var(X<sub>i</sub>) when i = j.
 
-    - In matrix terms, Cov(X) = [(X - &mu;) (X - &mu;)'], where &mu; =
+    - In matrix terms, Cov(X) = E[(X - &mu;) (X - &mu;)'], where &mu; =
       E(X).
 
     - Cov(AX) = A Cov(X) A'.
@@ -87,7 +89,7 @@ Author: Norm Matloff, UC Davis;
       population.
 
     - In computer science, the data are often viewed as fixed, but some
-      analyses described the data as coming from a "data generating
+      analyses describe the data as coming from a "data generating
       mechanism" and the like.
 
     - We take the statistical view here. Typically the data are assumed
@@ -154,7 +156,7 @@ Author: Norm Matloff, UC Davis;
   can be used to derive confidence regions in statistical applications,
   as will be seen below.
 
-# Example: Linear Model, Part I
+# Example: Linear Model
 
 * Let Y be a random variable and X =
   (X<sub>1</sub>,...,X<sub>p</sub>)' a p-dimensional random vector. E.g.
@@ -191,6 +193,22 @@ Author: Norm Matloff, UC Davis;
   where A is the n x (p+1) matrix will all 1s in column 1 and in column
   j > 1, all n values of X<sub>j-1</sub>.  Here W is the vector of all n
   values of Y.
+
+* Write column j+1 of A as (X<sub>j1</sub>,...,X<sub>jn</sub>)'. If say
+  X<sub>j</sub> is human age, then this vector consists of the ages of
+  all people in our dataset. Similarly, write W as
+  (Y<sub>1</sub>,...,Y<sub>n</sub>)', the vector of Y values for
+  everyone in our dataset.
+
+* By the way, since
+
+  E(Y | X) = X<sub>extend</sub>' &beta;
+
+  where X<sub>extend</sub> = (1,X)'
+
+  we have that
+
+  E(W | A) = A &beta;
 
 * The estimate vector b has an exact multivariate normal distribution
   with mean &beta; and covariance matrix 
@@ -548,28 +566,3 @@ requested.
 
 
 
-# Example: Linear Model, Part II 
-
-* To make things a little simpler to explain, we'll look at the
-  non-intercept model, in which E(X) is 0 and   
-
-  E(Y | X = t) = 
-  &beta;<sub>1</sub> t<sub>1</sub> + ... +
-  &beta;<sub>p</sub> t<sub>p</sub>. 
-
-  (One can easily convert the full model to the interceptless one by
-  subtracting means from X and Y.) So the A matrix is now n x p.
-
-* To prepare for the CLT, rewrite b:
-
-   b = [(1/n) A'A]<sup>-1</sup> [(1/n) A'W]
-
-
-
-* Let's first look at the "denominator" [(1/n) A'A]<sup>-1</sup>. The
-  number in row i, column j of A'A is the inner product of all n values
-  of X<sub>i</sub> and X<sub>j</sub>. (Check this.) That number is a sum
-  of n independent values, so the SLLN applies. Thus (1/n) A'A converges
-  almostt surely (and thus in probability) to E(XX'). (Again, check
-  this.) So, (1/n) A'A will play the role of "Y<sub>n</sub>" in part
-  (iii) of the Slutsky Theorem.
