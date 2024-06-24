@@ -1,7 +1,7 @@
 
 # fastBigStat
 
-A fast introduction to asymptotoic normality of statistical estimators.
+A fast introduction to asymptotic normality of statistical estimators.
 Includes the necessary material on multivariate distributions.  See also
 [my fast introduction to
 statistics](https://github.com/matloff/fastStat).
@@ -347,7 +347,7 @@ Author: Norm Matloff, UC Davis;
   converges in distribution to N(0,1).
 
   Many generalizations of the CLT exist, in which they relax the iid
-  assmuption.
+  assmuption, especially the second 'i'.
 
 * Scaling by the factor n<sup>1/2</sup> is "just right" to make things
   work here. If, say we were to divide instead by n, the quantity would
@@ -370,28 +370,26 @@ Author: Norm Matloff, UC Davis;
   converges in distribution to  N(0,&Sigma;). This can easily be proved using
   the Cramer-Wold device.
 
-# Examples of Asymptotic Normality 
+# Extended Example: Method of Moments (MM) Estimators
 
-We will show two applications of the above material. Both are serious
-applications, and thus rather involved. The reader's patience is
+This is a serious application of the above methodology, and will take
+time to prepare and apply the concepts. The reader's patience is
 requested.
 
-# Example: Method of Moments (MM) Estimators
+*Background on MM estimators*
 
-* Background on MM estimators
-
-  - Suppose we are modeling a random variable with some parametric
+* Suppose we are modeling a random variable with some parametric
     distribution family, such as normal, exonential or gamma. We want to
     estimate the parameter(s) from our data
     X<sub>1</sub>,...,X<sub>n</sub>. How can we do this?
 
-  - The most famous general method is *Maximum Likelihood Estimation*
+* The most famous general method is *Maximum Likelihood Estimation*
     (MLE), but it's somewhat less-famous cousin, the *Method of Moments* 
     (MM), is sometimes the handier one. (It is also the easier one to
     explain.)
 
-  - This is best introduced by example. Say we are modeling our
-    X<sup>i</sup> as having an exponential distribution, i.e. they have
+* This is best introduced by example. Say we are modeling our
+    X<sub>i</sub> as having an exponential distribution, i.e. they have
     density
 
     &tau; exp(-&tau;t).
@@ -403,9 +401,10 @@ requested.
     1/T. On the other hand, the classical estimate of a population mean
     is the sample mean,
 
-    X<sub>bar</sub> = X<sub>1</sub>,...,X<sub>n</sub>. So set our
-    estimated mean under the exponential assumption, 1/T, to our general
-    estimated mean, without that assmuption:
+    X<sub>bar</sub> = X<sub>1</sub>,...,X<sub>n</sub>. 
+
+    So set our estimated mean under the exponential assumption, 1/T, to
+    our general estimated mean, without that assmuption:
 
     1/T = X<sub>bar</sub>
 
@@ -413,13 +412,13 @@ requested.
 
     T = 1/X<sub>bar</sub>
 
-  - How does MM work in general, when we have more than one parameter?
+* How does MM work in general, when we have more than one parameter?
     Let's use k to denote the number of parameters in the given parametric
     family. For instance, k = 2 for the univariate normal family,
     corresponding to the two parameters &mu; and &sigma;<sup>2</sup>. We
     then must bring in E(X<sup>2</sup>) and so on, as follows.
 
-  - The r-th *moment* of a random variable X is defined to be
+* The r-th *moment* of a random variable X is defined to be
     m<sub>r</sub> = E(X<sup>r</sup>), r = 1,2,....  We will need to use
     the first k moments.
 
@@ -429,7 +428,7 @@ requested.
     M<sub>r</sub> = 
     (1/n) (X<sub>1</sub><sup>r</sup>+...+X<sub>n</sub><sup>r</sup>)
 
-  - Alternatively, for k > 1 one may use the r-th *central* moment, 
+* Alternatively, for k > 1 one may use the r-th *central* moment, 
 
     E[(X-E(X))<sup>r</sup>]
 
@@ -439,136 +438,178 @@ requested.
     It will be clear from context whether we mean the central or noncentral
     moment. 
 
-  - Use &tau; to denote the population value of the parameter, and T to 
+* Use &tau; to denote the population value of the parameter, and T to 
     denote its sample estimate under MM.  Both are vectors if k > 1.
 
-  - Before continuing, note again what happened when we set 1/T = A
-    above..  The left-hand side is our estimate of m<sub>1</sub> under
-    the exponential model, while the right-hand side is a general
-    estimator of m<sub>1</sub>, not assuming that model This is how the
-    Method of Moments works, by matching the two. We  will have k such
-    equations, then solve them for T.
+* Before continuing, let's review what happened when we set 1/T =
+  X<sub>bar</sub> above..  The left-hand side is our estimate of
+  m<sub>1</sub> under the exponential model, while the right-hand side
+  is a general estimator of m<sub>1</sub>, not assuming that model This
+  is how the Method of Moments works, by matching the two. We  will have
+  k such equations, then solve them for T.
 
-  - For an example with k = 2, consider the *gamma distribution family*:
+* For an example with k = 2, consider the *gamma distribution family*:
 
-    c &tau;<sub>1</sub><sup>&tau;<sub>2</sub></sup>
-    t<sup>&tau;<sub>2 </sub> - 1</sup></sup>
-    exp(-&tau;<sub>1</sub>t)
+  c &tau;<sub>1</sub><sup>&tau;<sub>2</sub></sup>
+  t<sup>&tau;<sub>2 </sub> - 1</sup></sup>
+  exp(-&tau;<sub>1</sub>t)
 
-    where c is a constant to make the density integrate to 1.0. This is
-    a common model used in network communications and medical survival
-    analysis for example.  Here
+  where c is a constant to make the density integrate to 1.0. This is
+  a common model used in network communications and medical survival
+  analysis for example.  
 
-    E(X) = &tau;<sub>2</sub> / &tau;<sub>1</sub>
+  Here is what the gamma family of densities looks like (from
+  *Probability and Statistics for Data Science: Math + R + Data*, N.
+  Matloff, 2019. Here r and &lambda; refer to our &tau;<sub>2</sub>
+  and &tau;<sub>1</sub>)  
 
-    and
+  ![Some densities from the gamma family](Gamma.png)
 
-    Var(X) = &tau;<sub>2</sub> / &tau;<sub>1</sub><sup>2</sup>
+  The model is handy when one has a distribution on (0,&infin;),
+  assumed unimodal.
 
-  - So, we equate:
+* The population moments are
 
-    M<sub>1</sub> = T<sub>2</sub> / T<sub>1</sub>
+  E(X) = &tau;<sub>2</sub> / &tau;<sub>1</sub>
 
-    and (using the central moment for M<sub>2</sub>)
+  and
 
-    M<sub>2</sub> = T<sub>2</sub> / T<sub>1</sub><sup>2</sup>
+  Var(X) = &tau;<sub>2</sub> / &tau;<sub>1</sub><sup>2</sup>
 
-  - These are nonlinear equations, but we are lucky here; they are
-    solvable from simple algebra (otherwise we would need to use
-    numerical approximation methods):
+* So, we equate:
 
-    T<sub>1</sub> = M<sub>1</sub> / M<sub>2</sub>
+  M<sub>1</sub> = T<sub>2</sub> / T<sub>1</sub>
 
-    and
+  and (using the central moment for M<sub>2</sub>)
 
-    T<sub>2</sub> = M<sub>1</sub> T<sub>1</sub> =
-    M<sub>1</sub><sup>2</sup> / M<sub>2</sub>
+  M<sub>2</sub> = T<sub>2</sub> / T<sub>1</sub><sup>2</sup>
 
+* These are nonlinear equations, but we are lucky here; they are
+  solvable from simple algebra (otherwise we would need to use
+  numerical approximation methods):
 
-* Consistency
+  T<sub>1</sub> = M<sub>1</sub> / M<sub>2</sub>
 
-  - Say we have an estimator &theta;<sub>n</sub> for a parameter &theta;
-    based on a sample of size n. As n goes to &infin;, we would like our
-    estimator to have the property that &theta;<sub>n</sub> goes to
-    &theta;. If it does almost surely, we say it is *strongly consistent*; if 
-    the convergence is just in probability, it is known as *weak
-    consistency*.
+  and
 
-    Since the SLLN implies that M<sub>i</sub> is strongly consistent for
-    m<sub>i</sub>, this implies the same for the T<sub>i</sub>, as long
-    as the moments are continuous functions of the M<sub>i</sub>.  In
-    the example above, for instance, M<sub>1</sub> and M<sub>2</sub>
-    converge almost surely, hence the T<sub>i</sub> do too.
+  T<sub>2</sub> = M<sub>1</sub> T<sub>1</sub> =
+  M<sub>1</sub><sup>2</sup> / M<sub>2</sub>
 
-* Asymptotic normality
+*Consistency*
 
-  - OK, we now have estimators for &tau;<sub>1</sub> and
-    &tau;<sub>2</sub>, and they are consistent. But the latter is a very
-    weak property. For good practical value, it would be desirable to
-    obtain confidence intervals from them. For this we need asymptotic
-    normality, as follows.
+* Say we have an estimator &theta;<sub>n</sub> for a parameter &theta;
+  based on a sample of size n. As n goes to &infin;, we would like our
+  estimator to have the property that &theta;<sub>n</sub> goes to
+  &theta;. If it does so almost surely, we say it is *strongly
+  consistent*; if the convergence is just in probability, it is known
+  as *weak consistency*.
 
-  - For simplicity, let's consider the case k = 1, so the density family
-    has a single scalar parameter, &tau;, as we saw in the exponential
-    example above. Then E(X) is some function g(&tau;). In the
-    exponential example, g(&tau;) = 1/&tau;.
+  Since the SLLN implies that M<sub>i</sub> is strongly consistent for
+  m<sub>i</sub>, this implies the same for the T<sub>i</sub>, as long
+  as the moments are continuous functions of the M<sub>i</sub>.  In
+  the example above, for instance, M<sub>1</sub> and M<sub>2</sub>
+  converge almost surely, hence the T<sub>i</sub> do too.
 
-    Assume g is differentiable with a continuous derivative g<sub>1</sub>. Then
-    Taylor's Theorem from calculus says
+*Asymptotic normality*
 
-    g(T) = g(&tau;) + g<sub>1</sub>(T<sub>betw</sub>) (T - &tau;)
+* OK, we now have estimators for &tau;<sub>1</sub> and
+  &tau;<sub>2</sub>, and they are consistent. But the latter is a very
+  weak property. For good practical value, it would be desirable to
+  obtain confidence intervals for the &tau;<sub>i</sub> from the
+  T<sub>i</sub>. For this we need asymptotic normality, as follows.
 
-    for some T<sub>betw</sub> between &tau; and T. 
+* For simplicity, let's consider the case k = 1, so the density family
+  has a single scalar parameter, &tau;, as we saw in the exponential
+  example above. Then E(X) is some function g(&tau;). In the
+  exponential example, g(&tau;) = 1/&tau;.
 
-  - Now to set up using the CLT, recall that we will set
+  Assume g is differentiable with a continuous derivative g<sub>1</sub>. Then
+  Taylor's Theorem from calculus says
 
-    g(T) = M<sub>1</sub>
+  g(T) = g(&tau;) + g<sub>1</sub>(T<sub>betw</sub>) (T - &tau;)
 
-    Then rewrite the earlier equation as
+  for some T<sub>betw</sub> between &tau; and T. 
 
-    n<sup>0.5</sup>(M<sub>1</sub> - m<sub>1</sub>) =
-    n<sup>0.5</sup> [g(T) - g(&tau;)] =
-    n<sup>0.5</sup> [g<sub>1</sub>(T<sub>betw</sub>) (T - &tau;)]
+* Now to set up using the CLT, recall that we will set
 
-    and then
+  g(T) = M<sub>1</sub>
 
-    n<sup>0.5</sup>(T - &tau;) =
-    n<sup>0.5</sup> (M<sub>1</sub> - m<sub>1</sub>)/ 
-    g<sub>1</sub>(T<sub>betw</sub>)
+  Then rewrite the earlier equation as
 
- -  We know that T is a strongly consistent estimator of &tau;, so by
-    the continuity of g<sub>1</sub>, the denominator in the RHS
-    converges almost surely to g<sub>1</sub>(&tau;). Applying the
-    Slutsky Theorem and the CLT (M<sub>1</sub> is a sum of iid terms),
-    we see that the RSH is asymptotically normal (though not with
-    standard deviation 1).
+  n<sup>0.5</sup>(M<sub>1</sub> - m<sub>1</sub>) =
+  n<sup>0.5</sup> [g(T) - g(&tau;)] =
+  n<sup>0.5</sup> [g<sub>1</sub>(T<sub>betw</sub>) (T - &tau;)]
 
-    The variance in that asymptotically normal distribution will be
+  and then
 
-    Var(M<sub>1</sub>/[g<sub>1</sub>(&tau;)]<sup>2</sup>
+  n<sup>0.5</sup>(T - &tau;) =
+  n<sup>0.5</sup> (M<sub>1</sub> - m<sub>1</sub>)/ 
+  g<sub>1</sub>(T<sub>betw</sub>)
 
-  - To compute a CI, we replace the quantities by their sample analogs.
-    E.g. our estimate of Var(M<sub>1</sub>) is
+* We know that T is a strongly consistent estimator of &tau;, so by
+  the continuity of g<sub>1</sub>, the denominator in the RHS
+  converges almost surely to g<sub>1</sub>(&tau;). Applying the
+  Slutsky Theorem and the CLT (M<sub>1</sub> is a sum of iid terms),
+  we see that the RHS is asymptotically normal (though not with
+  standard deviation 1).
 
-    s<sup>2</sup>= (1/n) &Sigma;<sub>i=1</sub><sup>n</sup> 
-    [X<sub>i</sub> - M<sub>1</sub>]<sup>2</sup>
+* In other words
 
-    (Divide by n-1 instead of n if you prefer, though there really is no
-    reason to do so.)
+  n<sup>0.5</sup>(T - &tau;) =<sub>asympt.</sub>
+  n<sup>0.5</sup> (M<sub>1</sub> - m<sub>1</sub>)/ 
+  g<sub>1</sub>(&tau;)
 
-    Our estimate of g<sub>1</sub>(&tau;) is 
+  Here =<sub>asymp.</sub> should not be viewed as "asymptotically
+  equal to," but rather "having the same asymptotic distribution as."  
 
-    g<sub>1</sub>(T) = -1/T<sup>2</sup>
+  The variance in that asymptotically normal distribution will be
 
-    Our CI, say for a 95% confidence level, is then 
+  Var(M<sub>1</sub>)/[g<sub>1</sub>(&tau;)]<sup>2</sup>
 
-    T &plusmn; 1.96 s/T<sup>2</sup>
+* To compute a CI, we replace the quantities by their sample analogs.
+  E.g. our estimate of Var(M<sub>1</sub>) is
 
-  - For the case k = 2, we have two functions, g and h, corresponding to
-    M<sub>1</sub> and M<sub>2</sub>, both having arguments T<sub>1</sub>
-    and T<sub>2</sub>. We now have derivatives g<sub>1</sub> and
-    h<sub>1</sub>, but they are now gradients.  The Multivariate CLT is
-    applied and so on.
+  s<sup>2</sup>= (1/n) &Sigma;<sub>i=1</sub><sup>n</sup> 
+  [X<sub>i</sub> - M<sub>1</sub>]<sup>2</sup>
 
+  (Divide by n-1 instead of n if you prefer, though there really is no
+  reason to do so.)
 
+  Our estimate of g<sub>1</sub>(&tau;) is 
+
+  g<sub>1</sub>(T) = -1/T<sup>2</sup>
+
+  Our CI, say for a 95% confidence level, is then 
+
+  T &plusmn; 1.96 s/T<sup>2</sup>
+
+* For k = 2, we now have functions g and h, both having 
+  arguments T<sub>1</sub> and T<sub>2</sub>. We now have 
+  derivatives g<sub>&Del;</sub> and h<sub>&Del;</sub>, but 
+  they are now gradients.  
+
+  n<sup>0.5</sup>(M1 - m1) =<sub>asymp..</sub>
+  n<sup>0.5</sup>
+  g<sub>&Del;</sub>' (T - &tau;)
+
+  n<sup>0.5</sup>(M2 - m2) =<sub>asymp.</sub>
+  n<sup>0.5</sup>
+  h<sub>&Del;</sub>' (T - &tau;)
+
+  Write M = (M<sub>1</sub>,M<sub>2</sub>)' and similarly for m. Then
+
+  n<sup>0.5</sup> (M - m) =<sub>asymp.</sub>
+  n<sup>0.5</sup>
+  A (T - &tau;)
+
+  where the matrix consists of g<sub>&Del;</sub>' in row 1 and
+  h<sub>&Del;</sub>' in row 2.
+
+* So, finally, we have that the asymptotic distribution of
+
+  n<sup>0.5</sup> (T - &tau;) is MV normal with covariance matrix
+ 
+  A<sup>-1</sup> Cov(M) A'<sup>-1</sup>
+ 
+  This enables confidence intervals and ellipsoids as before.
 
