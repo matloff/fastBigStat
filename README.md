@@ -2,8 +2,10 @@
 # fastBigStat
 
 A fast introduction to asymptotic normality of statistical estimators.
-Includes the necessary material on multivariate distributions.  See also
-[my fast introduction to
+Includes the necessary support material on random vectors and
+the multivariate normal (Gaussian) distribution family..
+
+See also [my fast introduction to
 statistics](https://github.com/matloff/fastStat).
 
 Author: Norm Matloff, UC Davis; 
@@ -41,8 +43,8 @@ Author: Norm Matloff, UC Davis;
 
       Cov(U,V) = E[(U-&alpha;)(V-&beta;)]
 
-      Intuitively, if often when U is above its mean then V is also
-      above its mean, then the covariance will be positive, etc. It's
+      Intuitively, if often when U is above its mean &alpha; then V is also
+      above its mean &beta;, then the covariance will be positive, etc. It's
       like correlation, and in fact the latter is a scaled version of
       covariance,
 
@@ -70,7 +72,7 @@ Author: Norm Matloff, UC Davis;
     - Let U and V be random quantities (scalars here, for convenience)
       for which the expectations below exist. Then
 
-      E[ E(V|U ] = E(V)
+      E[ E(V|U) ] = E(V)
 
       Note that E(V|U) is treated as a random variable, which it in fact
       is, since it is a function of U.
@@ -98,12 +100,38 @@ Author: Norm Matloff, UC Davis;
       issue), and the second means that each entity in the population
       has the same probability of being sampled.
 
-      The sample mean
+    - Note that this means that each W<sub>i</sub> has the distribution
+      of the population. E.g. if 29% of the units (e.g. people) in the
+      population have value below 221.4, then P(W<sub>i</sub> < 221.4) =
+      0.29.0.
 
-      (1/n) (W<sub>1</sub>+...+W<sub>n</sub>)
+    - The sample mean
 
-      is viewed as an estimate of the population mean E(W), where W has
-      the distribution of the popuulation, and so on. 
+      W<sub>bar</sub> = (1/n) (W<sub>1</sub>+...+W<sub>n</sub>)
+
+      being the sample analog of the population mean, is a natural
+      estimate (i.e. one that we might think of first if we were 
+      inventing statistics) of the population mean E(W), where W has
+      the distribution of the popuulation
+
+    - Similarly, since
+
+      Var(W) = E[(W - E(W))<sup>2]</sup>,
+
+      a natural estimator of Var(W) is
+
+      s<sup>2</sup> = (1/n) &Sigma;<sub>i</sub>
+      (W<sub>i</sub> - W<sub>bar</sub>)<sup>2</sup>
+
+      Suppose now W is a vector. The similar estimator of Cov(W) is
+
+      (1/n) &Sigma;<sub>i</sub> 
+      (W<sub>i</sub> - W<sub>bar</sub>)
+      (W<sub>i</sub> - W<sub>bar</sub>)'
+
+      (Many books will use n-1 rather than n as a divisor, for reasons
+      we will not pursue here, but it won't matter, as we are primarily
+      interested in large-n settings.)
 
 # The Multivariate Normal Distribution Family
 
@@ -111,7 +139,7 @@ Author: Norm Matloff, UC Davis;
   is now a vector &mu;, and standard deviation &sigma; now becomes the
   p x p covariance matrix &Sigma;.  Notation: N(&mu;,&Sigma;).
 
-* Density: c exp[(t-&mu;)' &Sigma;<sup>-1</sup> (t-&mu;)], where the
+* Density: c exp[-(t-&mu;)' &Sigma;<sup>-1</sup> (t-&mu;)], where the
   constant c makes the p-fold integral equal to 1.  This is for the case
   in which &Sigma; is invertible. 
 
@@ -139,12 +167,15 @@ Author: Norm Matloff, UC Davis;
   - That distribution is normal.
 
   - The mean of that distribution is linear in w, i.e. of the form
-    c'w for some c.
+    c'w for some c. (A fairly simple formula for c is available but not
+    shown here.)
 
   - The variance of that distribution is constant in w.
 
-* The *quadratic form* M = (X-&mu;)' &Sigma;<sup>-1</sup> (X-&mu;) has a 
-  chi-squared distribution with p degrees of freedom.
+* For a symmetric matrix A and vector u, the scalar quantity u'Au is
+  called a  *quadratic form*. For p-variate normal X, the
+  quadratic form M = (X-&mu;)' &Sigma;<sup>-1</sup> (X-&mu;) turns
+  out to have aa chi-squared distribution with p degrees of freedom.
 
 * So if &eta; is the q-th quantitle of the &chi;<sup>2</sup>
   distribution with p degrees of freedom, then
@@ -163,14 +194,14 @@ Author: Norm Matloff, UC Davis;
   we might wish to predict Y = college GPA from X<sub>1</sub> = high
   school GPA, X<sub>2</sub> = SAT score and so on.
 
-  The classic assumptions of the model are as follows. Let t =
+* The classic assumptions of the model are as follows. Let t =
   (t<sub>1</sub>,...,t<sub>p</sub>)'. 
 
   - Linearity: E(Y | X = t) = 
   &beta;<sub>0</sub> + 
   &beta;<sub>1</sub> t<sub>1</sub> + ... +
   &beta;<sub>p</sub> t<sub>p</sub>. 
-  for some unknown constant vector &beta; = 
+  for some unknown population vector &beta; = 
   (&beta;<sub>0</sub>, &beta;<sub>1</sub>,..., &beta;<sub>p</sub>)'.
 
   - Normality: The distribution of Y | X = t is normal for all t.
@@ -179,11 +210,18 @@ Author: Norm Matloff, UC Davis;
     we will denote by &sigma;<sup>2</sup>.
 
   - Independence: The random vectors (X<sub>1</sub>,Y<sub>1</sub>),...,
-  (X<sub>n</sub>,Y<sub>n</sub>) are independent.
+    (X<sub>n</sub>,Y<sub>n</sub>) are independent.
 
-  Here we have the X<sub>i</sub> random. In many books, they are
-  fixed. We will switch back and forth, conditioning on the X<sub>i</sub>
-  at times (thus treating them as fixed).
+  - Here we have the X<sub>i</sub> random, so that the vectors
+    (X<sub>1</sub>,Y<sub>1</sub>),..., (X<sub>h</sub>,Y<sub>h</sub>) are iid.
+    In our college GPA example above, we have sampled n students at
+    random, and their X values -- HS GPA, SAT -- are thus random as
+    well.
+
+  - In many books, the X values are taken to be fixed. This could be in
+    the above example that we had sampled students with pre-specified
+    HS GPA and SAT values. But actually, even with full random sampling,
+    we can still take the X values to be fixed, by conditioning on them.
 
 * One estmates &beta; from the data, using the formula for the estimates
   b = (b<sub>0</sub>, b<sub>1</sub>,...,b<sub>p</sub>)':
