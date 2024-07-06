@@ -151,7 +151,7 @@ Author: Norm Matloff, UC Davis;
   W<sub>i</sub> holds).
 
 * The notion of the normal distribution goes back to the 18th and 19th
-  centuries, especially due to the Central Limit Theorem.
+  centuries, especially due to the Central Limit Theorem (CLT).
 
 * One might say that the normal family was there in Nature, waiting to
   be discovered.
@@ -196,19 +196,38 @@ Author: Norm Matloff, UC Davis;
   Moreover, the quantity s is approximately &sigma;. So T is
   approximately N(0,1) distributed, even if W is not normal.
 
-* In other words, one can compare T to the standard normal distribution,
+* In other words, one can compare T to the N(0,1) distribution,
   and thus achieve approximately correct inference, even if the sample
   distribution was not normal. Hence the practice of approximate
-  inference. This lead to a branch of mathematical statistics, known as
-  large sample theory. Even MLEs are approximately normal (though the
-  context here is a little different; we are still assuming an exact
-  distribution for their sampled population).
+  inference. 
 
-* Even though we have computers today, and large-sample theory -- and
-  even though no random variable in the real world has an exact normal
-  distribution -- *many analysts today still favor "exact" statistical
-  methods*. They note that there is always the question of "How large is
-  'large'?" in large-sample theory. 
+* This led to a branch of mathematical statistics known as
+  large sample theory. Core among them is the fact that if a sequence of
+  random variables Z<sub>n</sub> is asymptotically normal, then so is
+  any smooth function of them g(Z<sub>n</sub>).
+
+* E.g. for MLEs. The likelihood is a product, so the log likelihood is a
+  sum, just what we need for the Central Limit Theorem! It doesn't quite
+  fit the CLT, is the terms are not independent, but it's enough, as
+  we can use some theory to take care of the non-independence.
+
+  Then g becomes the inverse function that is needed to solve for the
+  estimate, which is then approximately normal.  The context here is a
+  little different -- we are still assuming an exact distribution, e.g.
+  exponential, for the sampled population, but the principle is the
+  same.  Without large sample theory, in most cases we would not be able
+  to derive the exact distribution of the MLE.
+
+* The famous statistician George Box famously said, "All models are
+  wrong, but some are useful." No parametric model is truly correct in
+  Practice. No one is 10 feet tall, and no one's weight is negative.
+  No actual random variable is continuous, as our measuring
+  instruments are of only finite precision. Even the iid assumption is
+  often problematic.  So the term *exact inference* is illusory.
+
+* Approximate methods are very popular, including with me, but *many
+  analysts today still favor "exact" statistical methods*. They note
+  that there is always the question of "How large is 'large'?" 
 
 # The Multivariate Normal Distribution Family
 
@@ -264,12 +283,14 @@ Author: Norm Matloff, UC Davis;
   can be used to derive confidence regions in statistical applications,
   as will be seen below.
 
-# Example: Linear Model
+# Example: Linear Models, Exact and Approximate Inference
 
-* Let Y be a random variable and X =
-  (X<sub>1</sub>,...,X<sub>p</sub>)' a p-dimensional random vector. E.g.
-  we might wish to predict Y = college GPA from X<sub>1</sub> = high
-  school GPA, X<sub>2</sub> = SAT score and so on.
+* Let's see how all this plays out with the linear model.
+
+* Let Y be a random variable and X = (X<sub>1</sub>,...,X<sub>p</sub>)'
+  a p-dimensional random vector. E.g.  we might wish to predict Y =
+  college GPA from X<sub>1</sub> = high school GPA, X<sub>2</sub> = SAT
+  score and so on. Let's call this the "GPA example."
 
 * The classic assumptions of the model are as follows. Let t =
   (t<sub>1</sub>,...,t<sub>p</sub>)'. 
@@ -289,22 +310,28 @@ Author: Norm Matloff, UC Davis;
   - Independence: The random vectors (X<sub>1</sub>,Y<sub>1</sub>),...,
     (X<sub>n</sub>,Y<sub>n</sub>) are independent.
 
-  - Here we have the X<sub>i</sub> random, so that the vectors
-    (X<sub>1</sub>,Y<sub>1</sub>),..., (X<sub>h</sub>,Y<sub>h</sub>) are iid.
-    In our college GPA example above, we have sampled n students at
-    random, and their X values -- HS GPA, SAT -- are thus random as
-    well.
+* *Fixed-X* vs. *random-X* models.
+
+  - In many if not most applications, the X<sub>i</sub> are random, so that
+    the vectors (X<sub>1</sub>,Y<sub>1</sub>),...,
+    (X<sub>h</sub>,Y<sub>h</sub>) are iid.  In our GPA example above, we
+    have sampled n students at random, and their X values -- HS GPA, SAT
+    -- are thus random as well.
 
   - Historically, the X values have usually been taken to be 
     fixed. A typical example would be, say, some industrial process in
     which a designed experiment is conducted, with pre-specified X
     values.
 
-    Today, the fixed-X view is still the typical one. In the above
+  - Today, the fixed-X view is still the typical one. In the GPA
     example, it would mean that we had sampled students with
     pre-specified HS GPA and SAT values, which would probably not be the
     case. However, we can still take the X values to be fixed, by
     conditioning on them.
+
+  - In the fixed-X setting, we no longer have the second 'i' in 'iid',
+    but it doesn't matter much. For instance, there are versions of the
+    CLT that cover this situation.
 
 * One estmates &beta; from the data, using the formula for the estimates
   b = (b<sub>0</sub>, b<sub>1</sub>,...,b<sub>p</sub>)':
@@ -317,9 +344,7 @@ Author: Norm Matloff, UC Davis;
 
 * Write column j+1 of A as (X<sub>j1</sub>,...,X<sub>jn</sub>)'. If say
   X<sub>j</sub> is human age, then this vector consists of the ages of
-  all people in our dataset. Similarly, write W as
-  (Y<sub>1</sub>,...,Y<sub>n</sub>)', the vector of Y values for
-  everyone in our dataset.
+  all people in our dataset. 
 
 * By the way, since
 
@@ -357,7 +382,9 @@ Author: Norm Matloff, UC Davis;
    s<sup>2</sup> (A'A)<sup>-1</sup>
 
 * The stringent assumptions above enable exact statistical inference.
-  This enables exact confidence intervals and tests. 
+  This enables exact confidence intervals and tests. However, since b
+  consists of various sums, it is approximately normally distributed
+  even if Y|X is not assumed normal.
 
   - The quantity b<sub>i</sub> - &beta;<sub>i</sub> has a Student
     t-distribution with n-p-1 df, thus setting up a CI for
@@ -369,7 +396,8 @@ Author: Norm Matloff, UC Davis;
     &beta;<sub>2</sub> - &beta;<sub>1</sub> = c'&beta;
 
     where c = (0,1,-1,0,0,...,0)'. Since c'b will then have a univariate
-    normal distribution, we again can easily obtain a CI for the desired
+    normal distribution (recall the above material on MV normal
+    distributions), we again can easily obtain a CI for the desired
     quantity. Note that we need the estimated variance of c'b, which is
     
     s<sup>2</sup> c'(A'A)<sup>-1</sup>c
