@@ -3,7 +3,8 @@
 
 A fast introduction to asymptotic normality of statistical estimators.
 Includes the necessary support material on random vectors and
-the multivariate normal (Gaussian) distribution family..
+the multivariate normal (Gaussian) distribution family, as well as some
+insight into statistical inference based on normal distributions.
 
 See also [my fast introduction to
 statistics](https://github.com/matloff/fastStat).
@@ -133,6 +134,82 @@ Author: Norm Matloff, UC Davis;
       we will not pursue here, but it won't matter, as we are primarily
       interested in large-n settings.)
 
+# "Exact" vs. Approximate Statistical Inference: Historical perspective
+
+* Say we have scalars W<sub>i</sub> as above, with E(W<sub>i</sub>) &mu;
+  and Var(W<sub>i</sub> = &sigma;<sup>2</sup>. The latter two are
+  population values, and we wish to estimate &mu; in particular. 
+
+* When statistical inference methodology -- confidence intervals (CIs)
+  and hypothesis tests -- was being developed, they had no computers, so
+  they just made the assumption that the sampled quantity, W above, has
+  a normal distribution, to simplify things.
+
+* The pioneers of statistics didn't have asymptotic theory available
+  either, so the methodology they developed is called "exact"; the
+  probabilities etc. are exactly correct (if the assumption of normal
+  W<sub>i</sub> holds).
+
+* The notion of the normal distribution goes back to the 18th and 19th
+  centuries, especially due to the Central Limit Theorem.
+
+* One might say that the normal family was there in Nature, waiting to
+  be discovered.
+
+* But related distribution familes, notably chi-squared and the
+  F-distribution are "man-made," in the following sense.
+
+* With some clever math, they found that certain quantities of interest
+  had the same distribution as that of the sum of k squares of N(0,1)
+  variables. They thus decided to give this distribution family a name,
+  *chi-squared*, thus inventing a new distribution family.  (And they
+  laboriously tabulated this family's cdf by hand, just as they had for
+  the normal.)
+
+* With some more clever math, they found that a certain quantity had the
+  distribution of a N(0,1) random variable divided by an independent
+  chi-squared random variable. So they invented a new distribution
+  family accordingly, the Student-t distribution. For similar reasons,
+  they invented the F-distribution family.
+
+* This gives us the test taught in all elementary statistics courses: To
+  test the hypothesis H<sub>0</sub>: &mu; = c, form the expression
+  T = (W<sub>bar</sub> - c) / (s/n<sup>0.5</sup>) (where s is as above, but
+  with an n-1 divisor). This has a Student-t distribution with n-1
+  degrees of freedom, whose probabilities can then be used to form
+  cutoff levels for the test. 
+
+* For n = 50, for instance, the lower and upper 2.5% cutoffs are -2.01
+  and 2.01. So, we reject H<sub>0</sub> if (W<sub>bar</sub> - c) /
+  (s/n<sup>0.5</sup>) is outside these bounds.
+
+* This is called "exact" inference, since the probabilities are exact,
+  if the W<sub>i</sub> are normal.
+
+* Later other distribution families were developed, such as the
+  exponential and gamma, and thus exact methods were developed for them
+  as well. This led to development of a general method known as *maximum
+  likelihood estimation* (MLE).
+
+* Yet, people soon realized that in the expression T above,
+  W<sub>bar</sub> is approximately normal by the Central Limit Theorem.
+  Moreover, the quantity s is approximately &sigma;. So T is
+  approximately N(0,1) distributed, even if W is not normal.
+
+* In other words, one can compare T to the standard normal distribution,
+  and thus achieve approximately correct inference, even if the sample
+  distribution was not normal. Hence the practice of approximate
+  inference. This lead to a branch of mathematical statistics, known as
+  large sample theory. Even MLEs are approximately normal (though the
+  context here is a little different; we are still assuming an exact
+  distribution for their sampled population).
+
+* Even though we have computers today, and large-sample theory -- and
+  even though no random variable in the real world has an exact normal
+  distribution -- *many analysts today still favor "exact" statistical
+  methods*. They note that there is always the question of "How large is
+  'large'?" in large-sample theory. 
+
 # The Multivariate Normal Distribution Family
 
 * Consider a random vector X = (X<sub>1</sub>,...,X<sub>p</sub>)'. The mean
@@ -218,10 +295,16 @@ Author: Norm Matloff, UC Davis;
     random, and their X values -- HS GPA, SAT -- are thus random as
     well.
 
-  - In many books, the X values are taken to be fixed. This could be in
-    the above example that we had sampled students with pre-specified
-    HS GPA and SAT values. But actually, even with full random sampling,
-    we can still take the X values to be fixed, by conditioning on them.
+  - Historically, the X values have usually been taken to be 
+    fixed. A typical example would be, say, some industrial process in
+    which a designed experiment is conducted, with pre-specified X
+    values.
+
+    Today, the fixed-X view is still the typical one. In the above
+    example, it would mean that we had sampled students with
+    pre-specified HS GPA and SAT values, which would probably not be the
+    case. However, we can still take the X values to be fixed, by
+    conditioning on them.
 
 * One estmates &beta; from the data, using the formula for the estimates
   b = (b<sub>0</sub>, b<sub>1</sub>,...,b<sub>p</sub>)':
