@@ -350,6 +350,9 @@ Author: Norm Matloff, UC Davis;
   X<sub>j</sub> is human age, then this vector consists of the ages of
   all people in our dataset. 
 
+* The vector b, as a linear combination of W, has an exact MV normal
+  distribution if Y|X is exactly normally distributed.
+
 * By the way, since
 
   E(Y | X) = X<sub>extend</sub>' &beta;
@@ -360,8 +363,7 @@ Author: Norm Matloff, UC Davis;
 
   E(W | A) = A &beta;
 
-* The estimate vector b has an exact multivariate normal distribution
-  with mean &beta; and covariance matrix 
+* The estimate vector b has mean &beta; and covariance matrix 
 
   &sigma;<sup>2</sup> (A'A)<sup>-1</sup>. 
 
@@ -386,14 +388,11 @@ Author: Norm Matloff, UC Davis;
    s<sup>2</sup> (A'A)<sup>-1</sup>
 
 * The stringent assumptions above enable exact statistical inference.
-  This enables exact confidence intervals and tests. However, since b
-  consists of various sums, it is approximately normally distributed
-  even if Y|X is not assumed normal.
+  This enables exact confidence intervals and tests: 
 
   - The quantity b<sub>i</sub> - &beta;<sub>i</sub> has a Student
     t-distribution with n-p-1 df, thus setting up a CI for
-    &beta;<sub>i</sub>. For large n, Student t is basically the N(0,1)
-    distribution.
+    &beta;<sub>i</sub>. 
 
   - In some cases, we may be interested in something like, say,
 
@@ -406,26 +405,47 @@ Author: Norm Matloff, UC Davis;
     
     s<sup>2</sup> c'(A'A)<sup>-1</sup>c
 
-    So for large n, a 95% confidence interval for 
-     &beta;<sub>2</sub> - &beta;<sub>1</sub> is 
-
-    c'b &plusmn; 1.96 [s<sup>2</sup> c'(A'A)<sup>-1</sup>c]<sup>0.5</sup>
-
   - The quantity 
 
     (b-&beta;)'[s<sup>-2</sup> (A'A)] (b-&beta;)
 
     has an F-distribution with (p+1,n-p-1) df. This is the
     finite-sample version of the quadratic form discussed earlier.
-    But again for large n, this is approximately &chi;<sup>2</sup> with 
-    p+1 df. This sets up a confidence ellipsoid for &beta;:
+    This sets up a confidence ellipsoid for &beta;:
 
-    To form an approximate (1-&alpha;) 100% confidence ellipsoid for
+    To form a (1-&alpha;) 100% confidence ellipsoid for &beta;, let q be
+    the upper-&alpha; quantile of the F distribution with (p+1,n-p-1)
+    df.  Then the confidence ellipsoid is the set of all t such that 
+
+    (b-t)'[s<sup>-2</sup> (A'A)] (b-t) &le; q
+
+* The quantities A'W and A'A consist of lots of sums. Also, matrix
+  inversion is a smooth function. In other words, *b is asymptotically
+  MV normally distributed*.  Thus for large n, we can 
+  perform inference without assuming a normal Y|X:
+
+  - CIs for c'&beta;: An approximate 95% confidence interval for, e.g.
+    &beta;<sub>2</sub> - &beta;<sub>1</sub> is 
+
+    c'b &plusmn; 1.96 [s<sup>2</sup> c'(A'A)<sup>-1</sup>c]<sup>0.5</sup>
+
+  - To form an approximate (1-&alpha;) 100% confidence ellipsoid for
     &beta;, let q be the upper-&alpha; quantile of the &chi;<sup>2</sup>
     distribution with p+1 df. Then the confidence ellipsoid is the set
     of all t such that 
 
     (b-t)'[s<sup>-2</sup> (A'A)] (b-t) &le; q
+
+* An important aspect of large-sample theory is the sandwich estimator:
+
+  - The usual assumption that Var(Y|X=t) is constant in t is usually poor.
+    On the contrary, often the larger E(Y|X=t), then the larger is
+    Var(Y|X=t).
+
+  - The sandwich estimator makes inference asymptotically valid even
+    when Var(Y|X=t) is not constant in t. One makes a simple adjustment
+    to the estimated Cov(b) matrix computed under the assumption of
+    homogeneous variance.
 
 # Types of Convergence
 
