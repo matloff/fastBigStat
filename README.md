@@ -218,6 +218,9 @@ Author: Norm Matloff, UC Davis;
   same.  Without large sample theory, in most cases we would not be able
   to derive the exact distribution of the MLE.
 
+* The situation with linear regression models is similar, as will be
+  seen below.
+
 * The famous statistician George Box famously said, "All models are
   wrong, but some are useful." No parametric model is truly correct in
   Practice. No one is 10 feet tall, and no one's weight is negative.
@@ -225,7 +228,8 @@ Author: Norm Matloff, UC Davis;
   instruments are of only finite precision. Even the iid assumption is
   often problematic.  So the term *exact inference* is illusory.
 
-* Approximate methods are very popular, including with me, but *many
+* Approximate methods are very popular, including with me. I always use
+  N(0,1) instead of the Student-t distribution, for instance.  but *many
   analysts today still favor "exact" statistical methods*. They note
   that there is always the question of "How large is 'large'?" 
 
