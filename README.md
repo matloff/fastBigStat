@@ -554,7 +554,8 @@ requested.
     1/T. On the other hand, the classical estimate of a population mean
     is the sample mean,
 
-    X<sub>bar</sub> = X<sub>1</sub>,...,X<sub>n</sub>. 
+    X<sub>bar</sub> = 
+    (1/n) ( X<sub>1</sub>+...+X<sub>n</sub>) 
 
     So set our estimated mean under the exponential assumption, 1/T, to
     our general estimated mean, without that assmuption:
