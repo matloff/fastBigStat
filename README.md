@@ -134,7 +134,7 @@ Author: Norm Matloff, UC Davis;
       we will not pursue here, but it won't matter, as we are primarily
       interested in large-n settings.)
 
-# "Exact" vs. Approximate Statistical Inference: Historical perspective
+# "Exact" vs. Approximate Statistical Inference: Historical Perspective
 
 * Say we have scalars W<sub>i</sub> as above, with E(W<sub>i</sub>) &mu;
   and Var(W<sub>i</sub> = &sigma;<sup>2</sup>. The latter two are
