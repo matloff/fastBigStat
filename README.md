@@ -535,6 +535,16 @@ Author: Norm Matloff, UC Davis;
   we divide by (2 log n)<sup>1/2</sup> (and the limiting 
   distribution will be something other than normal).
 
+* We will often encounter a sequence of random variables Q<sub>n</sub>
+  that is asymptotically normal with mean &nu; and variance &gamma;.
+  Note carefully that that does NOT mean that E(Q<sub>n</sub>) &approx;
+  &nu; with a similar statement for variance. On the contrary,
+  E(Q<sub>n</sub>) could be infinite or undefined. Instead, it merely
+  means that cdf of 
+
+n<sup>0.5</sup>(Q<sub>n</sub> - &nu;)/&gamma;
+
+
 * Multivariate Central Limit Theorem: Let X<sub>i</sub>, i = 1,2,... be
   iid random vectors with mean vector &mu; and covariance matrix &Sigma;.
   Define T<sub>n</sub> = X<sub>1</sub>+...+X<sub>n</sub>, which has mean
@@ -1381,15 +1391,16 @@ requested.
 
 * Earlier, said, "if a sequence of random variables Z<sub>n</sub>
   (actually including the case of random vectors and an MV normal
-limit), is asymptotically normal, then so is any smooth function of them
-g(Z<sub>n</sub>)." This fact is quite useful.
+  limit), is asymptotically normal, then so is any smooth function of
+  them g(Z<sub>n</sub>)." This fact is quite useful.
 
 * Before we go on, note that "asymptotically normal" means in the sense
   of the CLT. So if we say "g(Z<sub>n</sub>)," we mean that its cdf is
   approximately equal to a normal cdf, and we must scale by n<sup>0.5</sup>.
 
 * The proof is similar to our derivation for MM estimators above. E.g.
-  for dimension 2, set &mu;= (&mu;<sub>1</sub>,&mu;<sub>2</sub>) 
+  for dimension 2, set &mu;= (&mu;<sub>1</sub>,&mu;<sub>2</sub>) to
+  denote the mean of the asymptotic normal distribution, and write
 
   g(Z<sub>n</sub>) - &mu; &approx;
 
