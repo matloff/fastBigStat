@@ -194,7 +194,8 @@ Author: Norm Matloff, UC Davis;
 * Yet, people soon realized that in the expression T above,
   W<sub>bar</sub> is approximately normal by the Central Limit Theorem.
   Moreover, the quantity s is approximately &sigma;. So T is
-  approximately N(0,1) distributed, even if W is not normal.
+  approximately N(0,1) distributed (this intuitive statement can be made
+  rigorous; see below), even if W is not normal.
 
 * In other words, one can compare T to the N(0,1) distribution,
   and thus achieve approximately correct inference, even if the sample
@@ -204,7 +205,8 @@ Author: Norm Matloff, UC Davis;
 * This led to a branch of mathematical statistics known as
   large sample theory. Core among them is the fact that if a sequence of
   random variables Z<sub>n</sub> is asymptotically normal, then so is
-  any smooth function of them g(Z<sub>n</sub>).
+  any smooth function of them g(Z<sub>n</sub>). (See "The Delta Method"
+  below.)
 
 * E.g. for MLEs. The likelihood is a product, so the log likelihood is a
   sum, just what we need for the Central Limit Theorem! It doesn't quite
@@ -787,3 +789,612 @@ requested.
  
   This enables confidence intervals and ellipsoids as before.
 
+# The Delta Method
+
+* Earlier, said, " if a sequence of
+  random variables Z<sub>n</sub> is asymptotically normal, then so is
+  any smooth function of them g(Z<sub>n</sub>). (See "The Delta Method"
+  below.)
+
+* E.g. for MLEs. The likelihood is a product, so the log likelihood is a
+  sum, just what we need for the Central Limit Theorem! It doesn't quite
+  fit the CLT, is the terms are not independent, but it's enough, as
+  we can use some theory to take care of the non-independence.
+
+  Then g becomes the inverse function that is needed to solve for the
+  estimate, which is then approximately normal.  The context here is a
+  little different -- we are still assuming an exact distribution, e.g.
+  exponential, for the sampled population, but the principle is the
+  same.  Without large sample theory, in most cases we would not be able
+  to derive the exact distribution of the MLE.
+
+* The situation with linear regression models is similar, as will be
+  seen below.
+
+* The famous statistician George Box famously said, "All models are
+  wrong, but some are useful." No parametric model is truly correct in
+  Practice. No one is 10 feet tall, and no one's weight is negative.
+  No actual random variable is continuous, as our measuring
+  instruments are of only finite precision. Even the iid assumption is
+  often problematic.  So the term *exact inference* is illusory.
+
+* Approximate methods are very popular, including with me. I always use
+  N(0,1) instead of the Student-t distribution, for instance.  but *many
+  analysts today still favor "exact" statistical methods*. They note
+  that there is always the question of "How large is 'large'?" 
+
+# The Multivariate Normal Distribution Family
+
+* Consider a random vector X = (X<sub>1</sub>,...,X<sub>p</sub>)'. The mean
+  is now a vector &mu;, and standard deviation &sigma; now becomes the
+  p x p covariance matrix &Sigma;.  Notation: N(&mu;,&Sigma;).
+
+* Density: c exp[-(t-&mu;)' &Sigma;<sup>-1</sup> (t-&mu;)], where the
+  constant c makes the p-fold integral equal to 1.  This is for the case
+  in which &Sigma; is invertible. 
+
+* We will always assume &Sigma; is inverible  unless stated otherwise.
+  It simply means that no X<sub>i</sub> a linear combination of the
+  others.
+
+* For p = 1 we have the familiar "bell-shaped curve", while
+  for p = 2, we get a 3-dimensional bell.
+
+![bivariate normal density](Bell.png)
+
+* Every marginal distribution of X is also multivariate normal.
+
+* For a constant m x p matrix A, AX is also multivariate normal. In
+  particular, if m = 1, then AX is univariate normal; the converse is
+  also true, i.e. if a'X is normal for all a, then X is multivariate
+  normal.
+
+* Conditional distributions:  For simplicity, consider the conditional
+  distribution of X<sub>i</sub> given (X<sub>1</sub>,...,X<sub>j-1</sub>,
+  X<sub>j+1</sub>,...,X<sub>p</sub>) = w.  Then (inspiration for the
+  familiar linear model):
+
+  - That distribution is normal.
+
+  - The mean of that distribution is linear in w, i.e. of the form
+    c'w for some c. (A fairly simple formula for c is available but not
+    shown here.)
+
+  - The variance of that distribution is constant in w.
+
+* For a symmetric matrix A and vector u, the scalar quantity u'Au is
+  called a  *quadratic form*. For p-variate normal X, the
+  quadratic form M = (X-&mu;)' &Sigma;<sup>-1</sup> (X-&mu;) turns
+  out to have aa chi-squared distribution with p degrees of freedom.
+
+* So if &eta; is the q-th quantitle of the &chi;<sup>2</sup>
+  distribution with p degrees of freedom, then
+
+  P(M < &eta;) = q
+
+* In the above picture, horizontal slices, i.e. level sets, are
+  ellipses. For p > 2, the regions are p-dimensional ellipsoids. This
+  can be used to derive confidence regions in statistical applications,
+  as will be seen below.
+
+# Example: Linear Models, Exact and Approximate Inference
+
+* Let's see how all this plays out with the linear model.
+
+* Let Y be a random variable and X = (X<sub>1</sub>,...,X<sub>p</sub>)'
+  a p-dimensional random vector. E.g.  we might wish to predict Y =
+  college GPA from X<sub>1</sub> = high school GPA, X<sub>2</sub> = SAT
+  score and so on. Let's call this the "GPA example."
+
+* The classic assumptions of the model are as follows. Let t =
+  (t<sub>1</sub>,...,t<sub>p</sub>)'. 
+
+  - Linearity: E(Y | X = t) = 
+  &beta;<sub>0</sub> + 
+  &beta;<sub>1</sub> t<sub>1</sub> + ... +
+  &beta;<sub>p</sub> t<sub>p</sub>. 
+  for some unknown population vector &beta; = 
+  (&beta;<sub>0</sub>, &beta;<sub>1</sub>,..., &beta;<sub>p</sub>)'.
+
+  - Normality: The distribution of Y | X = t is normal for all t.
+
+  - Homoscedasticity: Var(Y | X = t) is the same for all t, which
+    we will denote by &sigma;<sup>2</sup>.
+
+  - Independence: The random vectors (X<sub>1</sub>,Y<sub>1</sub>),...,
+    (X<sub>n</sub>,Y<sub>n</sub>) are independent.
+
+* *Fixed-X* vs. *random-X* models.
+
+  - In many if not most applications, the X<sub>i</sub> are random, so that
+    the vectors (X<sub>1</sub>,Y<sub>1</sub>),...,
+    (X<sub>h</sub>,Y<sub>h</sub>) are iid.  In our GPA example above, we
+    have sampled n students at random, and their X values -- HS GPA, SAT
+    -- are thus random as well.
+
+  - Historically, the X values have usually been taken to be 
+    fixed. A typical example would be, say, some industrial process in
+    which a designed experiment is conducted, with pre-specified X
+    values.
+
+  - Today, the fixed-X view is still the typical one. In the GPA
+    example, it would mean that we had sampled students with
+    pre-specified HS GPA and SAT values, which would probably not be the
+    case. However, we can still take the X values to be fixed, by
+    conditioning on them.
+
+  - In the fixed-X setting, we no longer have the second 'i' in 'iid',
+    but it doesn't matter much. For instance, there are versions of the
+    CLT that cover this situation.
+
+* One estmates &beta; from the data, using the formula for the estimates
+  b = (b<sub>0</sub>, b<sub>1</sub>,...,b<sub>p</sub>)':
+
+  b = (A'A)<sup>-1</sup> A'W
+
+  where A is the n x (p+1) matrix will all 1s in column 1 and in column
+  j > 1, all n values of X<sub>j-1</sub>.  Here W is the vector of all n
+  values of Y.
+
+* Write column j+1 of A as (X<sub>j1</sub>,...,X<sub>jn</sub>)'. If say
+  X<sub>j</sub> is human age, then this vector consists of the ages of
+  all people in our dataset. 
+
+* The vector b, as a linear combination of W, has an exact MV normal
+  distribution if Y|X is exactly normally distributed.
+
+* By the way, since
+
+  E(Y | X) = X<sub>extend</sub>' &beta;
+
+  where X<sub>extend</sub> = (1,X)'
+
+  we have that
+
+  E(W | A) = A &beta;
+
+* The estimate vector b has mean &beta; and covariance matrix 
+
+  &sigma;<sup>2</sup> (A'A)<sup>-1</sup>. 
+
+  Note that A is a function of the X data, but here we take it to be a
+  constant, by considering the conditional distribution of b given A.
+
+  Thus confidence intervals (CIs) and regions we obtain below are also
+  conditional. However, note that if, e.g. we have a conditional CI at
+  the 95% level, then the unconditional coverage probability is also
+  95%, by the Law of Iterated Expection above.
+
+* The unknown parameter &sigma;<sup>2</sup> must be estimated from the
+  data, as 
+
+  s<sup>2</sup> = [1/(n-p-1)] &Sigma;<sub>i</sub> 
+  (Y<sub>i</sub> - R<sub>i</sub> b)<sup>2</sup>
+
+  where R<sub>i</sub> is row i of A.
+
+* So the estimated conditional covariance matrix of b is
+
+   s<sup>2</sup> (A'A)<sup>-1</sup>
+
+* The stringent assumptions above enable exact statistical inference.
+  This enables exact confidence intervals and tests: 
+
+  - The quantity b<sub>i</sub> - &beta;<sub>i</sub> has a Student
+    t-distribution with n-p-1 df, thus setting up a CI for
+    &beta;<sub>i</sub>. 
+
+  - In some cases, we may be interested in something like, say,
+
+    &beta;<sub>2</sub> - &beta;<sub>1</sub> = c'&beta;
+
+    where c = (0,1,-1,0,0,...,0)'. Since c'b will then have a univariate
+    normal distribution (recall the above material on MV normal
+    distributions), we again can easily obtain a CI for the desired
+    quantity. Note that we need the estimated variance of c'b, which is
+    
+    s<sup>2</sup> c'(A'A)<sup>-1</sup>c
+
+  - The quantity 
+
+    (b-&beta;)'[s<sup>-2</sup> (A'A)] (b-&beta;)
+
+    has an F-distribution with (p+1,n-p-1) df. This is the
+    finite-sample version of the quadratic form discussed earlier.
+    This sets up a confidence ellipsoid for &beta;:
+
+    To form a (1-&alpha;) 100% confidence ellipsoid for &beta;, let q be
+    the upper-&alpha; quantile of the F distribution with (p+1,n-p-1)
+    df.  Then the confidence ellipsoid is the set of all t such that 
+
+    (b-t)'[s<sup>-2</sup> (A'A)] (b-t) &le; q
+
+* The quantities A'W and A'A consist of lots of sums. Also, matrix
+  inversion is a smooth function. In other words, *b is asymptotically
+  MV normally distributed*.  Thus for large n, we can 
+  perform inference without assuming a normal Y|X:
+
+  - CIs for c'&beta;: An approximate 95% confidence interval for, e.g.
+    &beta;<sub>2</sub> - &beta;<sub>1</sub> is 
+
+    c'b &plusmn; 1.96 [s<sup>2</sup> c'(A'A)<sup>-1</sup>c]<sup>0.5</sup>
+
+  - To form an approximate (1-&alpha;) 100% confidence ellipsoid for
+    &beta;, let q be the upper-&alpha; quantile of the &chi;<sup>2</sup>
+    distribution with p+1 df. Then the confidence ellipsoid is the set
+    of all t such that 
+
+    (b-t)'[s<sup>-2</sup> (A'A)] (b-t) &le; q
+
+* An important aspect of large-sample theory is the sandwich estimator:
+
+  - The usual assumption that Var(Y|X=t) is constant in t is usually poor.
+    On the contrary, often the larger E(Y|X=t), then the larger is
+    Var(Y|X=t).
+
+  - The sandwich estimator makes inference asymptotically valid even
+    when Var(Y|X=t) is not constant in t. One makes a simple adjustment
+    to the estimated Cov(b) matrix computed under the assumption of
+    homogeneous variance.
+
+# Types of Convergence
+
+* A sequence of random variables V<sub>n</sub> is said to converge 
+  *in probability* to a random variable V if for every &epsilon; > 0,
+
+  lim<sub>n &rarr; &infin;</sub> P(|V<sub>n</sub> - V| > &epsilon;) = 0
+ 
+* For random vectors V<sub>i</sub>, replace | | by, e.g. Euclidean
+  distance.
+
+* Say we have random variables Q<sub>n</sub>, not necessarily iid. If
+  for some constant c we have
+
+  P(lim<sub>n &rarr; &infin;</sub> Q<sub>n</sub> = c) = 1
+
+  then we say Q<sub>n</sub> converges *almost surely* to c. (The term
+  "almost surely" is just a fancy way of saying, "With probability 1.")
+
+* Example: the Strong Law of Large Numbers (SLLN). If the Q<sub>n</sub> are
+  iid with mean &mu;, then the sample average converges to the
+  distributional average: Set
+
+  A<sub>n</sub> = (1/n) (Q<sub>1</sub>+...+Q<sub>n</sub>)
+
+  Then A<sub>n</sub> converges almost surely to &mu;.
+
+* If cdfs of random variables converge, i.e. for each t,
+
+   lim<sub>n &rarr; &infin;</sub> P(Q<sub>n</sub> &le; t) = P(Q &le; t) 
+
+  for some random variable Q, we say Q<sub>n</sub> converges *in
+  distribution* to Q. Sometimes people omit mention of Q, simply
+  referring to its distribution.
+
+* Some types of convergence imply others:
+
+  almost sure => in probability => in distribution 
+
+* In p dimensions, we say that X<sub>i</sub> converges *in distribution* 
+  to X if the p-dimensional cdfs converge.
+
+* That definition is hard to deal with, but the Cramer-Wold device often
+  makes things easy: Consider a sequence of random vectors X<sub>n</sub>
+  and another random vector X. Then X<sub>n</sub> converges in
+  distribution to X if and only if for all p-vectors c, c'X<sub>n</sub>
+  converges in distribution to c'X.
+
+* Slutsky Theorem (due to Russian mathematician Evgeny Slutsky). Say
+  X<sub>n</sub> converges in distribution to X, and Y<sub>n</sub>
+  converges in probability to a constant c. Then:
+
+    - (i) X<sub>n</sub> + Y<sub>n</sub> converges in distribution to X+c.
+
+    - (ii) X<sub>n</sub> Y<sub>n</sub> converges in distribution to Xc.
+
+    - (iii) X<sub>n</sub> / Y<sub>n</sub> converges in distribution to X/c.
+     
+  The quantities can be matrix valued, in which case u/v means u
+  v<sup>-1</sup>, i.e. matrix inverse.  Of course, the inverse must
+  exist for all this to be valid.
+
+# Central Limit Theorems (CLTs)
+
+* Univariate Central Limit Theorem: Let X<sub>i</sub>, i = 1,2,... be
+  iid random variables with mean &mu; and variance &sigma;<sup>2</sup>.
+  Define T<sub>n</sub> = X<sub>1</sub>+...+X<sub>n</sub>, which has mean
+  and variance n &mu; and n &sigma;<sup>2</sup>. Then 
+
+    1/n<sup>1/2</sup> &sigma;<sup>-1</sup> (T<sub>n</sub> - n &mu;)
+
+  converges in distribution to N(0,1).
+
+  Many generalizations of the CLT exist, in which they relax the iid
+  assmuption, especially the second 'i'.
+
+* Scaling by the factor n<sup>1/2</sup> is "just right" to make things
+  work here. If, say we were to divide instead by n, the quantity would
+  go to 0, by the SLLN. That certainly would not be helpful in terms of
+  finding probabilities, confidence intervals and so on.
+
+  Other powers may apply for other quantities. For
+  example, if we are interested in the maximum of
+  X<sub>1</sub>,...,X<sub>n</sub> rather than their sum, then 
+  we divide by (2 log n)<sup>1/2</sup> (and the limiting 
+  distribution will be something other than normal).
+
+* Multivariate Central Limit Theorem: Let X<sub>i</sub>, i = 1,2,... be
+  iid random vectors with mean vector &mu; and covariance matrix &Sigma;.
+  Define T<sub>n</sub> = X<sub>1</sub>+...+X<sub>n</sub>, which has mean
+  and covariance matrix n &mu; and n &Sigma;. Then 
+
+    1/n<sup>1/2</sup> (T<sub>n</sub> - n &mu;)
+
+  converges in distribution to  N(0,&Sigma;). This can easily be proved using
+  the Cramer-Wold device.
+
+# Extended Example: Method of Moments (MM) Estimators
+
+This is a serious application of the above methodology, and will take
+time to prepare and apply the concepts. The reader's patience is
+requested.
+
+*Background on MM estimators*
+
+* Suppose we are modeling a random variable with some parametric
+    distribution family, such as normal, exonential or gamma. We want to
+    estimate the parameter(s) from our data
+    X<sub>1</sub>,...,X<sub>n</sub>. How can we do this?
+
+* The most famous general method is *Maximum Likelihood Estimation*
+    (MLE), but it's somewhat less-famous cousin, the *Method of Moments* 
+    (MM), is sometimes the handier one. (It is also the easier one to
+    explain.)
+
+* This is best introduced by example. Say we are modeling our
+    X<sub>i</sub> as having an exponential distribution, i.e. they have
+    density
+
+    &tau; exp(-&tau;t).
+
+    for some unknown parameter &tau;.  How do we construct the MM
+    estimate T of &tau;?
+
+    The mean of this distribution is 1/&tau;, which would be estimated by 
+    1/T. On the other hand, the classical estimate of a population mean
+    is the sample mean,
+
+    X<sub>bar</sub> = 
+    (1/n) ( X<sub>1</sub>+...+X<sub>n</sub>) 
+
+    So set our estimated mean under the exponential assumption, 1/T, to
+    our general estimated mean, without that assmuption:
+
+    1/T = X<sub>bar</sub>
+
+    That gives us our MM estimate,
+
+    T = 1/X<sub>bar</sub>
+
+* How does MM work in general, when we have more than one parameter?
+    Let's use k to denote the number of parameters in the given parametric
+    family. For instance, k = 2 for the univariate normal family,
+    corresponding to the two parameters &mu; and &sigma;<sup>2</sup>. We
+    then must bring in E(X<sup>2</sup>) and so on, as follows.
+
+* The r-th *moment* of a random variable X is defined to be
+    m<sub>r</sub> = E(X<sup>r</sup>), r = 1,2,....  We will need to use
+    the first k moments.
+
+    Note that this is a population value;
+    its intuitive sample estimate is 
+
+    M<sub>r</sub> = 
+    (1/n) (X<sub>1</sub><sup>r</sup>+...+X<sub>n</sub><sup>r</sup>)
+
+* Alternatively, for k > 1 one may use the r-th *central* moment, 
+
+    E[(X-E(X))<sup>r</sup>]
+
+    Since for r = 2 this is Var(X) and for r = 3 we get the skewness of the
+    distribution, things may be more convenient this way.
+
+    It will be clear from context whether we mean the central or noncentral
+    moment. 
+
+* Use &tau; to denote the population value of the parameter, and T to 
+    denote its sample estimate under MM.  Both are vectors if k > 1.
+
+* Before continuing, let's review what happened when we set 1/T =
+  X<sub>bar</sub> above..  The left-hand side is our estimate of
+  m<sub>1</sub> under the exponential model, while the right-hand side
+  is a general estimator of m<sub>1</sub>, not assuming that model This
+  is how the Method of Moments works, by matching the two. We  will have
+  k such equations, then solve them for T.
+
+* For an example with k = 2, consider the *gamma distribution family*:
+
+  c &tau;<sub>1</sub><sup>&tau;<sub>2</sub></sup>
+  t<sup>&tau;<sub>2 </sub> - 1</sup></sup>
+  exp(-&tau;<sub>1</sub>t)
+
+  where c is a constant to make the density integrate to 1.0. This is
+  a common model used in network communications and medical survival
+  analysis for example.  
+
+  Here is what the gamma family of densities looks like (from
+  *Probability and Statistics for Data Science: Math + R + Data*, N.
+  Matloff, 2019. Here r and &lambda; refer to our &tau;<sub>2</sub>
+  and &tau;<sub>1</sub>)  
+
+  ![Some densities from the gamma family](Gamma.png)
+
+  The model is handy when one has a distribution on (0,&infin;),
+  assumed unimodal.
+
+* The population moments are
+
+  E(X) = &tau;<sub>2</sub> / &tau;<sub>1</sub>
+
+  and
+
+  Var(X) = &tau;<sub>2</sub> / &tau;<sub>1</sub><sup>2</sup>
+
+* So, we equate:
+
+  M<sub>1</sub> = T<sub>2</sub> / T<sub>1</sub>
+
+  and (using the central moment for M<sub>2</sub>)
+
+  M<sub>2</sub> = T<sub>2</sub> / T<sub>1</sub><sup>2</sup>
+
+* These are nonlinear equations, but we are lucky here; they are
+  solvable from simple algebra (otherwise we would need to use
+  numerical approximation methods):
+
+  T<sub>1</sub> = M<sub>1</sub> / M<sub>2</sub>
+
+  and
+
+  T<sub>2</sub> = M<sub>1</sub> T<sub>1</sub> =
+  M<sub>1</sub><sup>2</sup> / M<sub>2</sub>
+
+*Consistency*
+
+* Say we have an estimator &theta;<sub>n</sub> for a parameter &theta;
+  based on a sample of size n. As n goes to &infin;, we would like our
+  estimator to have the property that &theta;<sub>n</sub> goes to
+  &theta;. If it does so almost surely, we say it is *strongly
+  consistent*; if the convergence is just in probability, it is known
+  as *weak consistency*.
+
+  Since the SLLN implies that M<sub>i</sub> is strongly consistent for
+  m<sub>i</sub>, this implies the same for the T<sub>i</sub>, as long
+  as the moments are continuous functions of the M<sub>i</sub>.  In
+  the example above, for instance, M<sub>1</sub> and M<sub>2</sub>
+  converge almost surely, hence the T<sub>i</sub> do too.
+
+*Asymptotic normality*
+
+* OK, we now have estimators for &tau;<sub>1</sub> and
+  &tau;<sub>2</sub>, and they are consistent. But the latter is a very
+  weak property. For good practical value, it would be desirable to
+  obtain confidence intervals for the &tau;<sub>i</sub> from the
+  T<sub>i</sub>. For this we need asymptotic normality, as follows.
+
+* For simplicity, let's consider the case k = 1, so the density family
+  has a single scalar parameter, &tau;, as we saw in the exponential
+  example above. Then E(X) is some function g(&tau;). In the
+  exponential example, g(&tau;) = 1/&tau;.
+
+  Assume g is differentiable with a continuous derivative g<sub>1</sub>. Then
+  Taylor's Theorem from calculus says
+
+  g(T) = g(&tau;) + g<sub>1</sub>(T<sub>betw</sub>) (T - &tau;)
+
+  for some T<sub>betw</sub> between &tau; and T. 
+
+* Now to set up using the CLT, recall that we will set
+
+  g(T) = M<sub>1</sub>
+
+  Then rewrite the earlier equation as
+
+  n<sup>0.5</sup>(M<sub>1</sub> - m<sub>1</sub>) =
+  n<sup>0.5</sup> [g(T) - g(&tau;)] =
+  n<sup>0.5</sup> [g<sub>1</sub>(T<sub>betw</sub>) (T - &tau;)]
+
+  and then
+
+  n<sup>0.5</sup>(T - &tau;) =
+  n<sup>0.5</sup> (M<sub>1</sub> - m<sub>1</sub>)/ 
+  g<sub>1</sub>(T<sub>betw</sub>)
+
+* We know that T is a strongly consistent estimator of &tau;, so by
+  the continuity of g<sub>1</sub>, the denominator in the RHS
+  converges almost surely to g<sub>1</sub>(&tau;). Applying the
+  Slutsky Theorem and the CLT (M<sub>1</sub> is a sum of iid terms),
+  we see that the RHS is asymptotically normal (though not with
+  standard deviation 1).
+
+* In other words
+
+  n<sup>0.5</sup>(T - &tau;) =<sub>asympt.</sub>
+  n<sup>0.5</sup> (M<sub>1</sub> - m<sub>1</sub>)/ 
+  g<sub>1</sub>(&tau;)
+
+  Here =<sub>asymp.</sub> should not be viewed as "asymptotically
+  equal to," but rather "having the same asymptotic distribution as."  
+
+  The variance in that asymptotically normal distribution will be
+
+  Var(M<sub>1</sub>)/[g<sub>1</sub>(&tau;)]<sup>2</sup>
+
+* To compute a CI, we replace the quantities by their sample analogs.
+  E.g. our estimate of Var(M<sub>1</sub>) is
+
+  s<sup>2</sup>= (1/n) &Sigma;<sub>i=1</sub><sup>n</sup> 
+  [X<sub>i</sub> - M<sub>1</sub>]<sup>2</sup>
+
+  (Divide by n-1 instead of n if you prefer, though there really is no
+  reason to do so.)
+
+  Our estimate of g<sub>1</sub>(&tau;) is 
+
+  g<sub>1</sub>(T) = -1/T<sup>2</sup>
+
+  Our CI, say for a 95% confidence level, is then 
+
+  T &plusmn; 1.96 s/T<sup>2</sup>
+
+* For k = 2, we now have functions g and h, both having 
+  arguments T<sub>1</sub> and T<sub>2</sub>. We now have 
+  derivatives g<sub>&Del;</sub> and h<sub>&Del;</sub>, but 
+  they are now gradients.  
+
+  n<sup>0.5</sup>(M1 - m1) =<sub>asymp..</sub>
+  n<sup>0.5</sup>
+  g<sub>&Del;</sub>' (T - &tau;)
+
+  n<sup>0.5</sup>(M2 - m2) =<sub>asymp.</sub>
+  n<sup>0.5</sup>
+  h<sub>&Del;</sub>' (T - &tau;)
+
+  Write M = (M<sub>1</sub>,M<sub>2</sub>)' and similarly for m. Then
+
+  n<sup>0.5</sup> (M - m) =<sub>asymp.</sub>
+  n<sup>0.5</sup>
+  A (T - &tau;)
+
+  where the matrix consists of g<sub>&Del;</sub>' in row 1 and
+  h<sub>&Del;</sub>' in row 2.
+
+* So, finally, we have that the asymptotic distribution of
+
+  n<sup>0.5</sup> (T - &tau;) is MV normal with covariance matrix
+ 
+  A<sup>-1</sup> Cov(M) A'<sup>-1</sup>
+ 
+  This enables confidence intervals and ellipsoids as before.
+
+# The Delta Method
+
+* Earlier, said, "if a sequence of random variables Z<sub>n</sub>
+  (actually including the case of random vectors and an MV normal
+limit), is asymptotically normal, then so is any smooth function of them
+g(Z<sub>n</sub>)." This fact is quite useful.
+
+* Before we go on, note that "asymptotically normal" means in the sense
+  of the CLT. So if we say "g(Z<sub>n</sub>)," we mean that its cdf is
+  approximately equal to a normal cdf, and we must scale by n<sup>0.5</sup>.
+
+* The proof is similar to our derivation for MM estimators above. E.g.
+  for dimension 2, set &mu;= (&mu;<sub>1</sub>,&mu;<sub>2</sub>) 
+
+  g(Z<sub>n</sub>) - &mu; &approx;
+
+  g<sub>1</sub>(&mu;)(</sub>(Z<sub>1</sub> - &mu;<sub>1</sub>) +
+  g<sub>2</sub>(&mu;)(</sub>(Z<sub>2</sub> - &mu;<sub>2</sub>)
+
+  The right-hand side is now a linear form in an MV normally distributed
+  vector, thus normal.
