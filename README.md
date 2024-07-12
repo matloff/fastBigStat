@@ -1,7 +1,40 @@
+<!-- TOC start (generated with https://github.com/derlin/bitdowntoc) -->
 
+- [fastBigStat](#fastbigstat)
+   * [Prerequisites ](#prerequisites)
+   * [Notation](#notation)
+- [Some Preliminaries ](#some-preliminaries)
+- ["Exact" vs. Approximate Statistical Inference: Historical Perspective](#exact-vs-approximate-statistical-inference-historical-perspective)
+- [The Multivariate Normal Distribution Family](#the-multivariate-normal-distribution-family)
+- [Example: Linear Models, Exact and Approximate Inference](#example-linear-models-exact-and-approximate-inference)
+   * [Classical linear model](#classical-linear-model)
+   * [*Fixed-X* vs. *random-X* models.](#fixed-x-vs-random-x-models)
+   * [Estimation ](#estimation)
+   * [Exact inference](#exact-inference)
+   * [Approximate inference](#approximate-inference)
+- [Simulation of MV Normal Random Vectors](#simulation-of-mv-normal-random-vectors)
+- [Types of Convergence](#types-of-convergence)
+- [Central Limit Theorems (CLTs)](#central-limit-theorems-clts)
+- [Extended Example: Method of Moments (MM) Estimators](#extended-example-method-of-moments-mm-estimators)
+   * [Approximate inference](#approximate-inference-1)
+- [The Multivariate Normal Distribution Family](#the-multivariate-normal-distribution-family-1)
+- [Example: Linear Models, Exact and Approximate Inference](#example-linear-models-exact-and-approximate-inference-1)
+- [Types of Convergence](#types-of-convergence-1)
+- [Central Limit Theorems (CLTs)](#central-limit-theorems-clts-1)
+- [Extended Example: Method of Moments (MM) Estimators](#extended-example-method-of-moments-mm-estimators-1)
+- [The Delta Method](#the-delta-method)
+
+<!-- TOC end -->
+
+
+
+
+<!-- TOC --><a name="fastbigstat"></a>
 # fastBigStat
 
-A fast introduction to asymptotic normality of statistical estimators.
+A *fast, practical introduction* to asymptotic normality of statistical
+estimators.
+
 Includes the necessary support material on random vectors and the
 multivariate (MV) normal (Gaussian) distribution family, as well as some
 insight into statistical inference based on normal distributions.
@@ -12,6 +45,7 @@ statistics](https://github.com/matloff/fastStat).
 Author: Norm Matloff, UC Davis; 
 [bio](http://heather.cs.ucdavis.edu/matloff.html)
 
+<!-- TOC --><a name="prerequisites"></a>
 ## Prerequisites 
 
 * Calculus-based probability theory -- random variables, cdfs, density
@@ -21,6 +55,7 @@ Author: Norm Matloff, UC Davis;
 
 * Familiarity with limits.
 
+<!-- TOC --><a name="notation"></a>
 ## Notation
 
 * Vectors will be in column form. 
@@ -29,6 +64,7 @@ Author: Norm Matloff, UC Davis;
 
 * The identity matrix, of whatever given size, will be denoted by I.
 
+<!-- TOC --><a name="some-preliminaries"></a>
 # Some Preliminaries 
 
 * Consider a random vector X = (X<sub>1</sub>,...,X<sub>p</sub>)', 
@@ -139,6 +175,7 @@ Author: Norm Matloff, UC Davis;
       we will not pursue here, but it won't matter, as we are primarily
       interested in large-n settings.)
 
+<!-- TOC --><a name="exact-vs-approximate-statistical-inference-historical-perspective"></a>
 # "Exact" vs. Approximate Statistical Inference: Historical Perspective
 
 * Say we have scalars W<sub>i</sub> as above, with E(W<sub>i</sub>) &mu;
@@ -210,8 +247,10 @@ Author: Norm Matloff, UC Davis;
 * This led to a branch of mathematical statistics known as large sample
   theory. Core among them is the fact that if a sequence of random
   variables Z<sub>n</sub> is asymptotically normal, then so is any
-  smooth function of them g(Z<sub>n</sub>). (See "The Delta Method, II"
-  below.)
+  smooth function of them g(Z<sub>n</sub>). Since the CLT says, roughly,
+  that sums are approximately normal, this gives us a sequence
+  X<sub>n</sub>, which when combined with a suitable function g can give
+  us asymptotic normality in many useful situations.
 
 * E.g. for MLEs. The likelihood is a product, so the log likelihood is a
   sum, just what we need for the Central Limit Theorem! It doesn't quite
@@ -240,6 +279,7 @@ Author: Norm Matloff, UC Davis;
   analysts today still favor "exact" statistical methods*. They note
   that there is always the question of "How large is 'large'?" 
 
+<!-- TOC --><a name="the-multivariate-normal-distribution-family"></a>
 # The Multivariate Normal Distribution Family
 
 * Consider a random vector X = (X<sub>1</sub>,...,X<sub>p</sub>)'. The mean
@@ -294,34 +334,39 @@ Author: Norm Matloff, UC Davis;
   can be used to derive confidence regions in statistical applications,
   as will be seen below.
 
+<!-- TOC --><a name="example-linear-models-exact-and-approximate-inference"></a>
 # Example: Linear Models, Exact and Approximate Inference
 
-* Let's see how all this plays out with the linear model.
+Let's see how all this plays out with the linear model.
 
-* Let Y be a random variable and X = (X<sub>1</sub>,...,X<sub>p</sub>)'
-  a p-dimensional random vector. E.g.  we might wish to predict Y =
-  college GPA from X<sub>1</sub> = high school GPA, X<sub>2</sub> = SAT
-  score and so on. Let's call this the "GPA example."
+Let Y be a random variable and X = (X<sub>1</sub>,...,X<sub>p</sub>)' a
+p-dimensional random vector. E.g.  we might wish to predict Y = college
+GPA from X<sub>1</sub> = high school GPA, X<sub>2</sub> = SAT score and
+so on. Let's call this the "GPA example."
 
-* The classic assumptions of the model are as follows. Let t =
+<!-- TOC --><a name="classical-linear-model"></a>
+## Classical linear model
+
+The classic assumptions of the model are as follows. Let t =
   (t<sub>1</sub>,...,t<sub>p</sub>)'. 
 
-  - Linearity: E(Y | X = t) = 
+* Linearity: E(Y | X = t) = 
   &beta;<sub>0</sub> + 
   &beta;<sub>1</sub> t<sub>1</sub> + ... +
   &beta;<sub>p</sub> t<sub>p</sub>. 
   for some unknown population vector &beta; = 
   (&beta;<sub>0</sub>, &beta;<sub>1</sub>,..., &beta;<sub>p</sub>)'.
 
-  - Normality: The distribution of Y | X = t is normal for all t.
+* Normality: The distribution of Y | X = t is normal for all t.
 
-  - Homoscedasticity: Var(Y | X = t) is the same for all t, which
+* Homoscedasticity: Var(Y | X = t) is the same for all t, which
     we will denote by &sigma;<sup>2</sup>.
 
-  - Independence: The random vectors (X<sub>1</sub>,Y<sub>1</sub>),...,
+* Independence: The random vectors (X<sub>1</sub>,Y<sub>1</sub>),...,
     (X<sub>n</sub>,Y<sub>n</sub>) are independent.
 
-* *Fixed-X* vs. *random-X* models.
+<!-- TOC --><a name="fixed-x-vs-random-x-models"></a>
+## *Fixed-X* vs. *random-X* models.
 
   - In many if not most applications, the X<sub>i</sub> are random, so that
     the vectors (X<sub>1</sub>,Y<sub>1</sub>),...,
@@ -343,6 +388,9 @@ Author: Norm Matloff, UC Davis;
   - In the fixed-X setting, we no longer have the second 'i' in 'iid',
     but it doesn't matter much. For instance, there are versions of the
     CLT that cover this situation.
+
+<!-- TOC --><a name="estimation"></a>
+## Estimation 
 
 * One estmates &beta; from the data, using the formula for the estimates
   b = (b<sub>0</sub>, b<sub>1</sub>,...,b<sub>p</sub>)':
@@ -381,6 +429,9 @@ Author: Norm Matloff, UC Davis;
   conditional. However, note that if, e.g. we have a conditional CI at
   the 95% level, then the unconditional coverage probability is also
   95%, by the Law of Iterated Expection above.
+
+<!-- TOC --><a name="exact-inference"></a>
+## Exact inference
 
 * The unknown parameter &sigma;<sup>2</sup> must be estimated from the
   data, as 
@@ -426,10 +477,13 @@ Author: Norm Matloff, UC Davis;
 
     (b-t)'[s<sup>-2</sup> (A'A)] (b-t) &le; q
 
-* The quantities A'W and A'A consist of lots of sums. Also, matrix
-  inversion is a smooth function. In other words, *b is asymptotically
-  MV normally distributed*.  Thus for large n, we can 
-  perform inference without assuming a normal Y|X:
+<!-- TOC --><a name="approximate-inference"></a>
+## Approximate inference
+
+The quantities A'W and A'A consist of lots of sums. Also, matrix
+inversion is a smooth function. In other words, *b is asymptotically MV
+normally distributed*.  Thus for large n, we can perform inference
+without assuming a normal Y|X:
 
   - CIs for c'&beta;: An approximate 95% confidence interval for, e.g.
     &beta;<sub>2</sub> - &beta;<sub>1</sub> is 
@@ -443,17 +497,85 @@ Author: Norm Matloff, UC Davis;
 
     (b-t)'[s<sup>-2</sup> (A'A)] (b-t) &le; q
 
-* An important aspect of large-sample theory is the sandwich estimator:
+## Heterodscedastic case
 
-  - The usual assumption that Var(Y|X=t) is constant in t is usually poor.
-    On the contrary, often the larger E(Y|X=t), then the larger is
-    Var(Y|X=t).
+Just as Box pointed out that no model is perfect, no assumption (really,
+part of a model) is perfect. The *homoscedasticity* assumption, 
+Var(Y|X=t) is constant in t, is a case in point. Typically,
+the larger is E(Y|X=t), then the larger is Var(Y|X=t).
 
-  - The sandwich estimator makes inference asymptotically valid even
-    when Var(Y|X=t) is not constant in t. One makes a simple adjustment
-    to the estimated Cov(b) matrix computed under the assumption of
-    homogeneous variance.
+What are the implications:
 
+* If the linearity assumption holds, then b will still be a *consistent*
+  estimator of &beta;, i.e. b &rightarrow; &beta; as n &rightarrow; &infin;.
+  (This will still be true if Y|X is not normal.)
+
+* However, b will not be optimal, i.e. not Minimum Variance Unbiased.
+
+* Inference will not be valid.
+
+Concerning that latter point, an important application of large-sample
+theory is the *sandwich estimator*, which makes inference asymptotically
+valid even when Var(Y|X=t) is not constant in t. It makes a simple
+adjustment to the estimated Cov(b) matrix computed under the assumption
+of homogeneous variance.
+
+One of the CRAN packages that implements this adjustment is named, of
+course, "sandwich." Here is an example:
+
+``` r
+z <- lm(mpg ~ .,mtcars)  # built-in R dataset
+covz <- vcov(z)  # estimated covariance matrix of b
+covzadj <- sandwich(z)  # adjusted version of covz
+covz['carb','carb']  # prints 0.6868307
+covzadj['carb','carb']  # prints 0.4209969
+
+```
+
+<!-- TOC --><a name="simulation-of-mv-normal-random-vectors"></a>
+# Simulation of MV Normal Random Vectors
+
+Suppose we wish the generate random vectors V having a p-variate normal
+distribution with mean &nu; and covariance matrix &Gamma;. How can we do
+this?
+
+We could find a square root matrix for &Gamma;, G. Then we generate
+vectors X consisting of p independent N(0,1) random variables, and set
+
+V = G X + &nu;
+
+Since X has covariance matrix equal to the identity matrix I, V will
+have the specified mean and covariance matrix, and it will be MV normal
+by linearity.
+
+R is famous for its CRAN package collection, so it is not surprising
+that this operation has already been coded, first in an early package,
+MASS and then in others. The function **MASS::mvrnorm** does this.
+
+What about regression contexts, say linear models with the standard
+assumptions? The model
+
+E(Y | X = t) =
+  &beta;<sub>0</sub> + 
+  &beta;<sub>1</sub> t<sub>1</sub> + ... +
+  &beta;<sub>p</sub> t<sub>p</sub>,
+
+Var(Y|X=t) = &sigma;<sup>2</sup>
+
+can be (and in most books, usually is) written as 
+
+Y = &beta;<sub>0</sub> +
+  &beta;<sub>1</sub> t<sub>1</sub> + ... +
+  &beta;<sub>p</sub> t<sub>p</sub> + &epsilon;
+
+where &epsilon; has a N(0,&sigma;<sup>2</sup>) distribution and is
+independent of X. (In the fixed-X context, the latter assumption is
+automatic.
+
+So, one can use **mvrnorm** to generate X, then **rnorm** to generate
+&epsilon;, thus obtaining Y.
+
+<!-- TOC --><a name="types-of-convergence"></a>
 # Types of Convergence
 
 * A sequence of random variables V<sub>n</sub> is said to converge 
@@ -515,6 +637,7 @@ Author: Norm Matloff, UC Davis;
   v<sup>-1</sup>, i.e. matrix inverse.  Of course, the inverse must
   exist for all this to be valid.
 
+<!-- TOC --><a name="central-limit-theorems-clts"></a>
 # Central Limit Theorems (CLTs)
 
 * Univariate Central Limit Theorem: Let X<sub>i</sub>, i = 1,2,... be
@@ -559,6 +682,7 @@ Author: Norm Matloff, UC Davis;
   converges in distribution to  N(0,&Sigma;). This can easily be proved using
   the Cramer-Wold device.
 
+<!-- TOC --><a name="extended-example-method-of-moments-mm-estimators"></a>
 # Extended Example: Method of Moments (MM) Estimators
 
 This is a serious application of the above methodology, and will take
@@ -799,11 +923,12 @@ requested.
 
   n<sup>0.5</sup> (T - &tau;) is MV normal with covariance matrix
  
-  A<sup>-1</sup> Cov(M) A'<sup>-1</sup>
+  A<sup>-1</sup> Cov(M) A<sup>-1</sup>'
  
   This enables confidence intervals and ellipsoids as before.
 
-# The Delta Method, II  
+<!-- TOC --><a name="approximate-inference-1"></a>
+## Approximate inference
 
 * Earlier, we said, "if a sequence of random variables Z<sub>n</sub> is
   asymptotically normal, then so is any smooth function of them
@@ -836,6 +961,7 @@ requested.
   analysts today still favor "exact" statistical methods*. They note
   that there is always the question of "How large is 'large'?" 
 
+<!-- TOC --><a name="the-multivariate-normal-distribution-family-1"></a>
 # The Multivariate Normal Distribution Family
 
 * Consider a random vector X = (X<sub>1</sub>,...,X<sub>p</sub>)'. The mean
@@ -890,6 +1016,7 @@ requested.
   can be used to derive confidence regions in statistical applications,
   as will be seen below.
 
+<!-- TOC --><a name="example-linear-models-exact-and-approximate-inference-1"></a>
 # Example: Linear Models, Exact and Approximate Inference
 
 * Let's see how all this plays out with the linear model.
@@ -905,7 +1032,7 @@ requested.
   - Linearity: E(Y | X = t) = 
   &beta;<sub>0</sub> + 
   &beta;<sub>1</sub> t<sub>1</sub> + ... +
-  &beta;<sub>p</sub> t<sub>p</sub>. 
+  &beta;<sub>p</sub> t<sub>p</sub>
   for some unknown population vector &beta; = 
   (&beta;<sub>0</sub>, &beta;<sub>1</sub>,..., &beta;<sub>p</sub>)'.
 
@@ -1050,6 +1177,7 @@ requested.
     to the estimated Cov(b) matrix computed under the assumption of
     homogeneous variance.
 
+<!-- TOC --><a name="types-of-convergence-1"></a>
 # Types of Convergence
 
 * A sequence of random variables V<sub>n</sub> is said to converge 
@@ -1111,6 +1239,7 @@ requested.
   v<sup>-1</sup>, i.e. matrix inverse.  Of course, the inverse must
   exist for all this to be valid.
 
+<!-- TOC --><a name="central-limit-theorems-clts-1"></a>
 # Central Limit Theorems (CLTs)
 
 * Univariate Central Limit Theorem: Let X<sub>i</sub>, i = 1,2,... be
@@ -1146,6 +1275,7 @@ requested.
   converges in distribution to  N(0,&Sigma;). This can easily be proved using
   the Cramer-Wold device.
 
+<!-- TOC --><a name="extended-example-method-of-moments-mm-estimators-1"></a>
 # Extended Example: Method of Moments (MM) Estimators
 
 This is a serious application of the above methodology, and will take
@@ -1390,16 +1520,18 @@ requested.
  
   This enables confidence intervals and ellipsoids as before.
 
-# The Delta Method, I
+<!-- TOC --><a name="the-delta-method"></a>
+# The Delta Method
 
-* Earlier, said, "if a sequence of random variables Z<sub>n</sub>
+* Earlier we said, "if a sequence of random variables Z<sub>n</sub>
   (actually including the case of random vectors and an MV normal
   limit), is asymptotically normal, then so is any smooth function of
   them g(Z<sub>n</sub>)." This fact is quite useful.
 
-* Before we go on, note that "asymptotically normal" means in the sense
-  of the CLT. So if we say "g(Z<sub>n</sub>)," we mean that its cdf is
-  approximately equal to a normal cdf, and we must scale by n<sup>0.5</sup>.
+* Before we go on, note again that "asymptotically normal" means in the
+  sense of the CLT. So if we say "g(Z<sub>n</sub>)," we mean that its
+  cdf is approximately equal to a normal cdf, and we must scale by
+  n<sup>0.5</sup>.
 
 * The proof is similar to our derivation for MM estimators above. E.g.
   for dimension 2, set &mu;= (&mu;<sub>1</sub>,&mu;<sub>2</sub>) to
