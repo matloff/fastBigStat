@@ -2,8 +2,8 @@
 # fastBigStat
 
 A fast introduction to asymptotic normality of statistical estimators.
-Includes the necessary support material on random vectors and
-the multivariate normal (Gaussian) distribution family, as well as some
+Includes the necessary support material on random vectors and the
+multivariate (MV) normal (Gaussian) distribution family, as well as some
 insight into statistical inference based on normal distributions.
 
 See also [my fast introduction to
@@ -60,6 +60,11 @@ Author: Norm Matloff, UC Davis;
       E(X).
 
     - Cov(AX) = A Cov(X) A'.
+
+    - For any constant vector C, Cov(X+c) = Cov(X),
+
+    - If (but not only if) vectors U and V are statistically
+      independent, then Cov(U+V) = Cov(U) + Cov(V).
 
     - Let &Sigma; be a covariance matrix. As a real, symmetric matrix,
       it can be diagonalized, i.e. &Sigma; = P D P' for an orthogonal
@@ -202,10 +207,10 @@ Author: Norm Matloff, UC Davis;
   distribution was not normal. Hence the practice of approximate
   inference. 
 
-* This led to a branch of mathematical statistics known as
-  large sample theory. Core among them is the fact that if a sequence of
-  random variables Z<sub>n</sub> is asymptotically normal, then so is
-  any smooth function of them g(Z<sub>n</sub>). (See "The Delta Method"
+* This led to a branch of mathematical statistics known as large sample
+  theory. Core among them is the fact that if a sequence of random
+  variables Z<sub>n</sub> is asymptotically normal, then so is any
+  smooth function of them g(Z<sub>n</sub>). (See "The Delta Method, II"
   below.)
 
 * E.g. for MLEs. The likelihood is a product, so the log likelihood is a
@@ -542,8 +547,7 @@ Author: Norm Matloff, UC Davis;
   E(Q<sub>n</sub>) could be infinite or undefined. Instead, it merely
   means that cdf of 
 
-n<sup>0.5</sup>(Q<sub>n</sub> - &nu;)/&gamma;
-
+  n<sup>0.5</sup>(Q<sub>n</sub> - &nu;)/&gamma;
 
 * Multivariate Central Limit Theorem: Let X<sub>i</sub>, i = 1,2,... be
   iid random vectors with mean vector &mu; and covariance matrix &Sigma;.
@@ -799,12 +803,11 @@ requested.
  
   This enables confidence intervals and ellipsoids as before.
 
-# The Delta Method
+# The Delta Method, II  
 
-* Earlier, said, " if a sequence of
-  random variables Z<sub>n</sub> is asymptotically normal, then so is
-  any smooth function of them g(Z<sub>n</sub>). (See "The Delta Method"
-  below.)
+* Earlier, we said, "if a sequence of random variables Z<sub>n</sub> is
+  asymptotically normal, then so is any smooth function of them
+  g(Z<sub>n</sub>). 
 
 * E.g. for MLEs. The likelihood is a product, so the log likelihood is a
   sum, just what we need for the Central Limit Theorem! It doesn't quite
@@ -1387,7 +1390,7 @@ requested.
  
   This enables confidence intervals and ellipsoids as before.
 
-# The Delta Method
+# The Delta Method, I
 
 * Earlier, said, "if a sequence of random variables Z<sub>n</sub>
   (actually including the case of random vectors and an MV normal
@@ -1400,12 +1403,18 @@ requested.
 
 * The proof is similar to our derivation for MM estimators above. E.g.
   for dimension 2, set &mu;= (&mu;<sub>1</sub>,&mu;<sub>2</sub>) to
-  denote the mean of the asymptotic normal distribution, and write
+  denote the mean of the asymptotic normal distribution, with &Sigma;
+  representing the corresponding covariance matrix.
 
-  g(Z<sub>n</sub>) - &mu; &approx;
+  Now write
 
-  g<sub>1</sub>(&mu;)(</sub>(Z<sub>1</sub> - &mu;<sub>1</sub>) +
-  g<sub>2</sub>(&mu;)(</sub>(Z<sub>2</sub> - &mu;<sub>2</sub>)
+  g(Z<sub>n</sub>) - &mu; &approx; 
+  g<sub>1</sub>(&mu;)(</sub>(Z<sub>1n</sub> - &mu;<sub>1</sub>) +
+  g<sub>2</sub>(&mu;)(</sub>(Z<sub>2n</sub> - &mu;<sub>2</sub>) =
+  A (Z - &mu;)
+
+  where the 1 x 2 matrix A = (g<sub>1</sub>(&mu;), g<sub>2</sub>(&mu;)).
 
   The right-hand side is now a linear form in an MV normally distributed
-  vector, thus normal.
+  vector, thus MV (actually univariate) normal, with mean 0 and
+  variance A &Sigma; A'.
