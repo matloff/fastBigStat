@@ -638,6 +638,20 @@ have a simultaneous confidence level.
     are tangent to the ellipsoid from above and below. Say c<sub>w</sub> is the
     smaller of b<sub>w</sub> and c<sub>w</sub>.
 
+  - Let's visualize this, using the CRAN package **ellipse**. Its
+    function **ellipse.lm** draws a confidence ellipse for the output of
+    a linear model.
+
+    ``` r
+    fit <- lm(mpg ~ qsec + wt , mtcars)
+    plot(ellipse(fit, which = c('qsec', 'wt'), level = 0.90), type = 'l') 
+    # draw a pair of parallel tangent lines, w = (2.5,-1)'
+    abline(-9.05,2.5)
+    abline(-5.70,2.5)
+    ```
+
+  ![confidence ellipse](Ellipse.png)
+
   - With 95% probability, &theta; is somewhere inside the ellipsoid.
     (Note that it is the ellipsoid that is random, not &theta;.)
 
