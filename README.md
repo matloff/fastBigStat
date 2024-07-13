@@ -133,6 +133,10 @@ Author: Norm Matloff, UC Davis;
       population have value below 221.4, then P(W<sub>i</sub> < 221.4) =
       0.29.0.
 
+      Similarly, if the population quantity is normally distributed,
+      that means each W<sub>i</sub> has a normal distribution (with the
+      same mean and variance as the population).
+
     - The sample mean
 
       W<sub>bar</sub> = (1/n) (W<sub>1</sub>+...+W<sub>n</sub>)
@@ -418,9 +422,23 @@ bulleted item above says, "The regression function of Y on X is linear."
 
   E(W | A) = A &beta;
 
-* The estimate vector b has mean &beta; and covariance matrix 
+  and thus 
+
+  E(b | A) = &beta;
+
+  (unbiasedness).
+
+* What about Cov(b|A)? Start with the fact that, by assumption,
+
+  Cov(Y|A) = &sigma;<sup>2</sup> I
 
   &sigma;<sup>2</sup> (A'A)<sup>-1</sup>. 
+
+  Write B = (A'A)<sup>-1</sup> A, so that b = BW. Then after some
+  algebra, we have
+
+  Cov(B|A) = B &sigma;<sup>2</sup> I B' = &sigma;<sup>2</sup>
+  (A'A)<sup>-1</sup>
 
   Note that A is a function of the X data, but here we take it to be a
   constant, by considering the conditional distribution of b given A.
@@ -448,9 +466,10 @@ bulleted item above says, "The regression function of Y on X is linear."
 * The stringent assumptions above enable exact statistical inference.
   This enables exact confidence intervals and tests: 
 
-  - The quantity b<sub>i</sub> - &beta;<sub>i</sub> has a Student
-    t-distribution with n-p-1 df, thus setting up a CI for
-    &beta;<sub>i</sub>. 
+  - The quantity b<sub>i</sub> - &beta;<sub>i</sub>, divided by the
+    estimated standard deviation (square root of element i+1 in the
+    estimated Cov(b|A)), has a Student t-distribution with n-p-1 df,
+    thus setting up a CI for &beta;<sub>i</sub>. 
 
   - In some cases, we may be interested in something like, say,
 
@@ -466,10 +485,9 @@ bulleted item above says, "The regression function of Y on X is linear."
 <!-- TOC --><a name="approximate-inference"></a>
 ## Approximate inference
 
-The quantities A'W and A'A consist of lots of sums. Also, matrix
-inversion is a smooth function. In other words, *b is asymptotically MV
-normally distributed*.  Thus for large n, we can perform inference
-without assuming a normal Y|X:
+The quantity A'W consists of sums, so *b is asymptotically MV normally
+distributed*.  Thus for large n, we can perform inference without
+assuming a normal Y|X:
 
   - CIs for c'&beta;: An approximate 95% confidence interval for, e.g.
     &beta;<sub>2</sub> - &beta;<sub>1</sub> is 
@@ -488,12 +506,16 @@ says Var(Y|X=t) is constant in t.
 
 * Typically, the larger is E(Y|X=t), then the larger is Var(Y|X=t). Say
   we are predicting weight from height. Since taller people tend to have
-  more (interperson) variability weight, homoscedasticity would be
+  more (interperson) variability in weight, homoscedasticity would be
   seriously violated.
 
-* The estimator b will not be optimal, i.e. not Minimum Variance Unbiased.
-  For optimality, weighted least squares must be used, with weights
-  equal to the reciprocal of the conditional variance.
+* If so, the estimator b will not be optimal, i.e. not Minimum Variance
+  Unbiased.  For optimality, weighted least squares must then be used,
+  with weights equal to the reciprocal of the conditional variance. That
+  is, we minimize
+
+   &Sigma;<sub>i</sub> [Var(Y|X=X<sub>i</sub>)]<sup>-1 
+   </sup>[Y<sub>i</sub> - b'X<sub>i</sub> ]<sup>2</sup>
 
 * But in the sense of consistency, it doesn't matter what weights we use.
   If the linearity assumption holds, then b will still be a *consistent*
@@ -502,7 +524,7 @@ says Var(Y|X=t) is constant in t.
 
 * As noted earlier, lack of normality of Y|X alone does not invalidate
   statistical inference, due to the CLT. But assuming homoscedasticity
-  when it is not approximately correct does invalidate inference, , as
+  when it is not approximately correct does invalidate inference, as
   the condtional covariance matrix of b is no longer &sigma;<sup>2</sup>
   (A'A)<sup>-1</sup>.
 
@@ -527,21 +549,27 @@ covzadj['carb','carb']  # prints 0.4209969
 
 *Informal proof of consistency*
 
+For convenience, assume Fixed-X regression. Let w(t) be our weight
+function.
+
 Note that for any nonnegative weight function w(t), the  quantity 
 
-E[W(X)(Y - m(X))<sup>2</sup>] 
+E[w(X)(Y - m(X))<sup>2</sup>] 
 
 is minimized across all functions m by m(t) = E(Y|X=t), as can be seen
 by conditioning on X and applying ordinary calculus. So if linearity
-holds, setting v equal to the true population &beta; will minimize
+holds, 
 
-E[w(X)(Y - v'X)<sup>2</sup>] 
+E[w(X)((Y - v'X)<sup>2</sup>] 
+
+achieves its minimum at v = &beta;
 
 for any weight function w, in particular the w having constant value 1.
-In other words, setting v equal to the true population &beta; will
-minimize
+In other words, 
 
-E[Y - v'X)<sup>2</sup>] 
+E[(Y - v'X)<sup>2</sup>] 
+
+achieves its minimum at v = &beta;
 
 Say we blindly do OLS (ordinary least squares, i.e.
 unweighted), i.e. we choose v = b to minimize
@@ -550,12 +578,20 @@ unweighted), i.e. we choose v = b to minimize
 
 which is the sample analog of 
 
-E[Y - v'X)<sup>2</sup>] 
+E[(Y - v'X)<sup>2</sup>] 
 
-Intuitively, the quantity minimizing the sample average sum of squares will
-converge to population average sum of square, i.e. b will converge to
-&beta;.
+For each fixed v, that sample quantity will converge to the
+corresponding population quantity. Then intuitively, the v that
+minimizes 
 
+(1/n) &Sigma;<sub>i</sub> [Y<sub>i</sub> - v'X<sub>i</sub> ]<sup>2</sup>
+
+will converge to the v that minimizes
+
+E[(Y - v'X)<sup>2</sup>] 
+
+i.e. b will converge to &beta;. However, a formal proof of this requires
+some real analysis.
 
 # Multiple Inference Procedures
 
