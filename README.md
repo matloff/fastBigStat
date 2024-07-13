@@ -526,34 +526,34 @@ covzadj['carb','carb']  # prints 0.4209969
 
 *Informal proof of consistency*
 
-Note that for any nonnegative weight function w(t), quantity 
+Note that for any nonnegative weight function w(t), the  quantity 
 
-X)(Y - m(X))<sup>2</sup>] 
+E[W(X)(Y - m(X))<sup>2</sup>] 
 
-inimized across all functions m by m(t) = E(Y|X=t), as can be seen
-onditioning on X and applying ordinary calculus. So if linearity
-s, setting v equal to the true population &beta; will minimize
+is minimized across all functions m by m(t) = E(Y|X=t), as can be seen
+by conditioning on X and applying ordinary calculus. So if linearity
+holds, setting v equal to the true population &beta; will minimize
 
-X)(Y - v'X)<sup>2</sup>] 
+E[w(X)(Y - v'X)<sup>2</sup>] 
 
-any weight function w, in particular the w with constant value 1.
-ther words, setting v equal to the true population &beta; will
-mize
+for any weight function w, in particular the w having constant value 1.
+In other words, setting v equal to the true population &beta; will
+minimize
 
-- v'X)<sup>2</sup>] 
+E[Y - v'X)<sup>2</sup>] 
 
-ther words, say we blindly do OLS (ordinary least squares, i.e.
-ighted), i.e. we choose v = b to minimize
+Say we blindly do OLS (ordinary least squares, i.e.
+unweighted), i.e. we choose v = b to minimize
 
-)&Sigma;<sub>i</sub> [Y<sub>i</sub> - v'X<sub>i</sub> ]<sup>2</sup>
+(1/n) &Sigma;<sub>i</sub> [Y<sub>i</sub> - v'X<sub>i</sub> ]<sup>2</sup>
 
-h is the sample analog of 
+which is the sample analog of 
 
- - v'X)<sup>2</sup>] 
+E[Y - v'X)<sup>2</sup>] 
 
-itively, the quantity minimizing the sample average sum of squares will
-erge to population average sum of square, i.e. b will converge to
-a;.
+Intuitively, the quantity minimizing the sample average sum of squares will
+converge to population average sum of square, i.e. b will converge to
+&beta;.
 
 
 # Multiple Inference Procedures
@@ -564,6 +564,9 @@ jointly. In other words, in repeated sampling, the proportion of samples
 in which both CIs contain the associated population parameter is less
 than 95%. What if we want to form many CIs, and still have their joint
 confidence level at or above 95%?
+
+This branch of statistics is called *multiple inference* or
+*simultaneous inference*.
 
 ## The Bonferroni Inequality
 
@@ -577,11 +580,13 @@ least 95%, we can form each at the 97.5% level.
 
 ## The Scheffe' method
 
-But this conservative approach is not feasible for forming many CI.
-Another approach is the *Scheffe' method*, based on confidence
-ellipsoids. Consider the linear model first:
+But this conservative approach is not feasible for forming more than two
+or three CIs.  Another approach is the *Scheffe' method*, based on
+confidence ellipsoids. 
 
-  - The quantity 
+*How to form confidence ellipsoids*
+
+  - Consider the linear model first. The quantity 
 
     (b-&beta;)'[s<sup>-2</sup> (A'A)] (b-&beta;)
 
@@ -604,8 +609,50 @@ ellipsoids. Consider the linear model first:
     (b-t)'[s<sup>-2</sup> (A'A)] (b-t) &le; q
 
   - More generally, consider any asymptotically normal estimator
-    &theta;<sub>est</sub> of a population parametric &theta;.
+    &theta;<sub>est</sub> of a p-dimensional population parametric &theta;.
+    Let Q denote its (asymptotic) covariance matrix. The confidence
+    ellipsoid for the true &theta; is the set of all t such that
 
+    (b-t)' Q<sup>-1</sup> (b-t) &le; q
+
+*Forming simultaneous confidence intervals*
+
+Now let's see how we can go from confidence *ellipsoid* to confidence
+*intervals* for scalar quantities, and in such a way that the intervals
+have a simultaneous confidence level.
+
+  - Again, consider any asymptotically normal estimator
+    &theta;<sub>est</sub> of a p-dimensional population parametric &theta;.
+    Let Q denote its (asymptotic) covariance matrix, and form the
+    confidence ellipsoid as above. 
+
+  - Consider a linear combination w'&theta;. Set b and c such that the
+    lines (p=2), planes (p=3) or hyperplanes (p > 3)
+
+    w'&theta; = b<sub>w</sub>
+
+    and
+
+    w'&theta; = c<sub>w</sub>
+
+    are tangent to the ellipsoid from above and below. Say c<sub>w</sub> is the
+    smaller of b<sub>w</sub> and c<sub>w</sub>.
+
+  - With 95% probability, &theta; is somewhere inside the ellipsoid.
+    (Note that it is the ellipsoid that is random, not &theta;.)
+
+  - And, if &theta; is in the ellipsoid, then w'&theta; will be in
+    (c<sub>w</sub>,b<sub>w</sub>) (though not *only* if). In other
+    words, (c<sub>w</sub>,b<sub>w</sub>) is a confidence interval for
+    w'&theta; of level at least 95%.
+
+  - For each possible w, we get the above pair of tangents.
+    Geometrically it is clear that &theta; will be inside the ellipsoid
+    if and only if w'&theta; is in (c<sub>w</sub>,b<sub>w</sub>) 
+    *for all w*.
+
+  - Thus the probability that all the intervals
+    (c<sub>w</sub>,b<sub>w</sub>) hold simultaneously is 95%.
 
 <!-- TOC --><a name="simulation-of-mv-normal-random-vectors"></a>
 # Simulation of MV Normal Random Vectors
