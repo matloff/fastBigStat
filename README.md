@@ -62,11 +62,9 @@ Author: Norm Matloff, UC Davis;
 <!-- TOC --><a name="some-preliminaries"></a>
 # Some Preliminaries 
 
-* Consider a random vector X = (X<sub>1</sub>,...,X<sub>p</sub>)', 
-  and a constant m x p matrix A.
+* Consider a random vector X = (X<sub>1</sub>,...,X<sub>p</sub>)'. 
 
-* E(AX) = A E(X).  Note that these are vector/matrix quantities, i.e.
-  componentwise means.
+* E(X) means the vector of componentwise means E(X<sub>i</sub>).
 
 * Covariance
 
@@ -89,13 +87,6 @@ Author: Norm Matloff, UC Davis;
 
     - In matrix terms, Cov(X) = E[(X - &mu;) (X - &mu;)'], where &mu; =
       E(X).
-
-    - Cov(AX) = A Cov(X) A'.
-
-    - For any constant vector C, Cov(X+c) = Cov(X),
-
-    - If (but not only if) vectors U and V are statistically
-      independent, then Cov(U+V) = Cov(U) + Cov(V).
 
     - Let &Sigma; be a covariance matrix. As a real, symmetric matrix,
       it can be diagonalized, i.e. &Sigma; = P D P' for an orthogonal
@@ -166,15 +157,20 @@ Author: Norm Matloff, UC Davis;
       (W<sub>i</sub> - W<sub>bar</sub>)
       (W<sub>i</sub> - W<sub>bar</sub>)'
 
-      (Many books will use n-1 rather than n as a divisor, for reasons
-      we will not pursue here, but it won't matter, as we are primarily
-      interested in large-n settings.)
+      Many books will use n-1 rather than n as a divisor, to make
+      s<sup>2</sup> *unbiased*, i.e.
+
+      E(s<sup>2</sup>) = Var(W)
+
+      This says the average of s<sup>2</sup>, over all possible samples,
+      is equal to the population variance. This usually won't matter for
+      us, as we are primarily interested in large-n settings.
 
 <!-- TOC --><a name="exact-vs-approximate-statistical-inference-historical-perspective"></a>
 # "Exact" vs. Approximate Statistical Inference: Historical Perspective
 
-* Say we have scalars W<sub>i</sub> as above, with E(W<sub>i</sub>) &mu;
-  and Var(W<sub>i</sub> = &sigma;<sup>2</sup>. The latter two are
+* Say we have scalars W<sub>i</sub> as above, with E(W<sub>i</sub>) = &mu;
+  and Var(W<sub>i</sub>) = &sigma;<sup>2</sup>. The latter two are
   population values, and we wish to estimate &mu; in particular. 
 
 * When statistical inference methodology -- confidence intervals (CIs)
@@ -193,8 +189,8 @@ Author: Norm Matloff, UC Davis;
 * One might say that the normal family was there in Nature, waiting to
   be discovered.
 
-* But related distribution familes, notably chi-squared and the
-  F-distribution are "man-made," in the following sense.
+* But related distribution familes, notably Student-t, chi-squared and
+  the F-distribution are "man-made," in the following sense.
 
 * With some clever math, they found that certain quantities of interest
   had the same distribution as that of the sum of k squares of N(0,1)
@@ -204,10 +200,10 @@ Author: Norm Matloff, UC Davis;
   the normal.)
 
 * With some more clever math, they found that a certain quantity had the
-  distribution of a N(0,1) random variable divided by an independent
-  chi-squared random variable. So they invented a new distribution
-  family accordingly, the Student-t distribution. For similar reasons,
-  they invented the F-distribution family.
+  distribution of a N(0,1) random variable divided by the square root of
+  an independent chi-squared random variable. So they invented a new
+  distribution family accordingly, the *Student-t distribution*. For
+  similar reasons, they invented the *F-distribution* family.
 
 * This gives us the test taught in all elementary statistics courses: To
   test the hypothesis H<sub>0</sub>: &mu; = c, form the expression
@@ -239,8 +235,8 @@ Author: Norm Matloff, UC Davis;
   distribution was not normal. Hence the practice of approximate
   inference. 
 
-* This led to a branch of mathematical statistics known as large sample
-  theory. Core among them is the fact that if a sequence of random
+* This led to a branch of mathematical statistics known as *large sample
+  theory*. Core among them is the fact that if a sequence of random
   variables Z<sub>n</sub> is asymptotically normal, then so is any
   smooth function of them g(Z<sub>n</sub>). Since the CLT says, roughly,
   that sums are approximately normal, this gives us a sequence
@@ -252,27 +248,32 @@ Author: Norm Matloff, UC Davis;
   fit the CLT, is the terms are not independent, but it's enough, as
   we can use some theory to take care of the non-independence.
 
-  Then g becomes the inverse function that is needed to solve for the
-  estimate, which is then approximately normal.  The context here is a
-  little different -- we are still assuming an exact distribution, e.g.
-  exponential, for the sampled population, but the principle is the
-  same.  Without large sample theory, in most cases we would not be able
-  to derive the exact distribution of the MLE.
+  We set the derivative of the log likelihood to 0, and solve for our
+  parameter estimate. Here g becomes the inverse function that is needed
+  to solve for the estimate, which is then approximately normal.  
+
+  The context here is a little different -- we are still assuming an
+  exact distribution, e.g.  exponential, for the sampled population, but
+  the principle is the same.  Without large sample theory, in most cases
+  we would not be able to derive the exact distribution of the MLE.
 
 * The situation with linear regression models is similar, as will be
   seen below.
 
 * The famous statistician George Box famously said, "All models are
   wrong, but some are useful." No parametric model is truly correct in
-  Practice. No one is 10 feet tall, and no one's weight is negative.
-  No actual random variable is continuous, as our measuring
-  instruments are of only finite precision. Even the iid assumption is
-  often problematic.  So the term *exact inference* is illusory.
+  practice. No one is 10 feet tall, and no one's weight is negative, so
+  heights and weights cannot be exactly normal.  No actual random
+  variable is continuous, as our measuring instruments are of only
+  finite precision, so again models such as normal, exponential, gamma
+  and so on are necessarily inexact.  Even the iid assumption is often
+  problematic.  So the term *exact inference* is illusory.
 
 * Approximate methods are very popular, including with me. I always use
   N(0,1) instead of the Student-t distribution, for instance.  but *many
   analysts today still favor "exact" statistical methods*. They note
-  that there is always the question of "How large is 'large'?" 
+  for example that there is always the question of "How large is 'large'?" 
+  if one uses asymptotics.
 
 <!-- TOC --><a name="the-multivariate-normal-distribution-family"></a>
 # The Multivariate Normal Distribution Family
@@ -317,7 +318,7 @@ Author: Norm Matloff, UC Davis;
 * For a symmetric matrix A and vector u, the scalar quantity u'Au is
   called a  *quadratic form*. For p-variate normal X, the
   quadratic form M = (X-&mu;)' &Sigma;<sup>-1</sup> (X-&mu;) turns
-  out to have aa chi-squared distribution with p degrees of freedom.
+  out to have a chi-squared distribution with p degrees of freedom.
 
 * So if &eta; is the q-th quantile of the &chi;<sup>2</sup>
   distribution with p degrees of freedom, then
@@ -327,7 +328,7 @@ Author: Norm Matloff, UC Davis;
 * In the above picture, horizontal slices, i.e. level sets, are
   ellipses. For p > 2, the regions are p-dimensional ellipsoids. This
   can be used to derive confidence regions in statistical applications,
-  as will be seen below.
+  as will be seen later.
 
 <!-- TOC --><a name="example-linear-models-exact-and-approximate-inference"></a>
 # Example: Linear Models, Exact and Approximate Inference
@@ -373,7 +374,7 @@ bulleted item above says, "The regression function of Y on X is linear."
     have sampled n students at random, and their X values -- HS GPA, SAT
     -- are thus random as well.
 
-  - Historically, the X values have usually been taken to be 
+  - But historically, the X values have usually been taken to be 
     fixed. A typical example would be, say, some industrial process in
     which a designed experiment is conducted, with pre-specified X
     values.
@@ -647,10 +648,10 @@ have a simultaneous confidence level.
     plot(ellipse(fit, which = c('qsec', 'wt'), level = 0.90), type = 'l') 
     # draw a pair of parallel tangent lines, w = (2.5,-1)'
     abline(-9.05,2.5)
-    abline(-5.70,2.5)
+    abline(-5.70,2.5)  
     ```
 
-  ![confidence ellipse](Ellipse.png)
+  ![confidence ellipse](Ellipse.png){width=60%}
 
   - With 95% probability, &theta; is somewhere inside the ellipsoid.
     (Note that it is the ellipsoid that is random, not &theta;.)
