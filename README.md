@@ -360,6 +360,10 @@ The classic assumptions of the model are as follows. Let t =
 * Independence: The random vectors (X<sub>1</sub>,Y<sub>1</sub>),...,
     (X<sub>n</sub>,Y<sub>n</sub>) are independent.
 
+The function r(t) = E(Y|X=t) is called the *regression function* of Y on
+X. The term does NOT necessarily mean a linear model. So the first
+bulleted item above says, "The regression function of Y on X is linear."
+
 <!-- TOC --><a name="fixed-x-vs-random-x-models"></a>
 ## *Fixed-X* vs. *random-X* models.
 
@@ -475,26 +479,33 @@ without assuming a normal Y|X:
 ## Relaxing the assumptions
 
 Just as Box pointed out that no model is perfect, no assumption (really,
-part of a model) is perfect. The *homoscedasticity* assumption, 
-Var(Y|X=t) is constant in t, is a case in point. Typically,
-the larger is E(Y|X=t), then the larger is Var(Y|X=t).
+part of a model) is perfect. Let's look at the normality assumption (Y|X
+is normally distributed), and the *homoscedasticity* assumption, that
+says Var(Y|X=t) is constant in t. 
 
-What are the implications?
+*What can we say, assuming that linearity still holds?*
+
+* Typically, the larger is E(Y|X=t), then the larger is Var(Y|X=t). Say
+  we are predicting weight from height. Since taller people tend to have
+  more (interperson) variability weight, homoscedasticity would be
+  seriously violated.
 
 * The estimator b will not be optimal, i.e. not Minimum Variance Unbiased.
   For optimality, weighted least squares must be used, with weights
   equal to the reciprocal of the conditional variance.
 
-* If the linearity assumption holds, then b will still be a *consistent*
+* But in the sense of consistency, it doesn't matter what weights we use.
+  If the linearity assumption holds, then b will still be a *consistent*
   estimator of &beta;, i.e. b &rightarrow; &beta; as n &rightarrow; &infin;.
+  (See informal proof at the end of this section.)
 
-  For any nonnegative weight function The quantity E[w(X)(Y -
-  m(X))<sup>2</sup>] is minimized across all functions m by m(t) =
-  Var(Y|X=t), as can be seen by conditioning on X. The OLS (ordinary
-  least squares) still works.
+* As noted earlier, lack of normality of Y|X alone does not invalidate
+  statistical inference, due to the CLT. But assuming homoscedasticity
+  when it is not approximately correct does invalidate inference, , as
+  the condtional covariance matrix of b is no longer &sigma;<sup>2</sup>
+  (A'A)<sup>-1</sup>.
 
-* However, inference will not be valid, as the condtional covariance
-  matrix of b is no longer &sigma;<sup>2</sup> (A'A)<sup>-1</sup>.
+*The sandwich estimator*
 
 Concerning that latter point, an important application of large-sample
 theory is the *sandwich estimator*, which makes inference asymptotically
@@ -512,6 +523,38 @@ covzadj <- sandwich(z)  # adjusted version of covz
 covz['carb','carb']  # prints 0.6868307
 covzadj['carb','carb']  # prints 0.4209969
 ```
+
+*Informal proof of consistency*
+
+Note that for any nonnegative weight function w(t), quantity 
+
+X)(Y - m(X))<sup>2</sup>] 
+
+inimized across all functions m by m(t) = E(Y|X=t), as can be seen
+onditioning on X and applying ordinary calculus. So if linearity
+s, setting v equal to the true population &beta; will minimize
+
+X)(Y - v'X)<sup>2</sup>] 
+
+any weight function w, in particular the w with constant value 1.
+ther words, setting v equal to the true population &beta; will
+mize
+
+- v'X)<sup>2</sup>] 
+
+ther words, say we blindly do OLS (ordinary least squares, i.e.
+ighted), i.e. we choose v = b to minimize
+
+)&Sigma;<sub>i</sub> [Y<sub>i</sub> - v'X<sub>i</sub> ]<sup>2</sup>
+
+h is the sample analog of 
+
+ - v'X)<sup>2</sup>] 
+
+itively, the quantity minimizing the sample average sum of squares will
+erge to population average sum of square, i.e. b will converge to
+a;.
+
 
 # Multiple Inference Procedures
 
