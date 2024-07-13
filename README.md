@@ -512,11 +512,14 @@ says Var(Y|X=t) is constant in t.
 * If so, the estimator b will not be optimal, i.e. not Minimum Variance
   Unbiased.  For optimality, weighted least squares must then be used,
   with weights equal to the reciprocal of the conditional variance. That
-  is, we minimize
+  is, we should minimize
 
-   &Sigma;<sub>i</sub> [Var(Y|X=X<sub>i</sub>)]<sup>-1 
-   </sup>[Y<sub>i</sub> - b'X<sub>i</sub> ]<sup>2</sup>
+  &Sigma;<sub>i</sub> [Var(Y|X=X<sub>i</sub>)]<sup>-1 
+  </sup>[Y<sub>i</sub> - b'X<sub>i</sub> ]<sup>2</sup>
 
+  The word "should" applies here, as we usually don't know that
+  conditional variance function.
+   
 * But in the sense of consistency, it doesn't matter what weights we use.
   If the linearity assumption holds, then b will still be a *consistent*
   estimator of &beta;, i.e. b &rightarrow; &beta; as n &rightarrow; &infin;.
@@ -549,7 +552,7 @@ covzadj['carb','carb']  # prints 0.4209969
 
 *Informal proof of consistency*
 
-For convenience, assume Fixed-X regression. Let w(t) be our weight
+For convenience, assume Random-X regression. Let w(t) be our weight
 function.
 
 Note that for any nonnegative weight function w(t), the  quantity 
@@ -562,10 +565,8 @@ holds,
 
 E[w(X)((Y - v'X)<sup>2</sup>] 
 
-achieves its minimum at v = &beta;
-
-for any weight function w, in particular the w having constant value 1.
-In other words, 
+achieves its minimum at v = &beta; for any weight function w, in
+particular the w having constant value 1.  In other words, 
 
 E[(Y - v'X)<sup>2</sup>] 
 
@@ -596,11 +597,11 @@ some real analysis.
 # Multiple Inference Procedures
 
 Suppose we form two 95% confidence intervals from our dataset. Though
-they are individually value at the 95% level, this is not the case
+they are individually valid at the 95% level, this is not the case
 jointly. In other words, in repeated sampling, the proportion of samples
-in which both CIs contain the associated population parameter is less
-than 95%. What if we want to form many CIs, and still have their joint
-confidence level at or above 95%?
+in which both CIs contain the associated population parameter in the
+same sample is less than 95%. What if we want to form many CIs, and
+still have their joint confidence level at or above 95%?
 
 This branch of statistics is called *multiple inference* or
 *simultaneous inference*.
@@ -623,7 +624,8 @@ confidence ellipsoids.
 
 *How to form confidence ellipsoids*
 
-  - Consider the linear model first. The quantity 
+  - Consider the linear model first. If all the assumptions hold,
+    The quantity 
 
     (b-&beta;)'[s<sup>-2</sup> (A'A)] (b-&beta;)
 
@@ -656,7 +658,7 @@ confidence ellipsoids.
 
 Now let's see how we can go from confidence *ellipsoid* to confidence
 *intervals* for scalar quantities, and in such a way that the intervals
-have a simultaneous confidence level.
+have a given simultaneous confidence level.
 
   - Again, consider any asymptotically normal estimator
     &theta;<sub>est</sub> of a p-dimensional population parametric &theta;.
@@ -687,15 +689,19 @@ have a simultaneous confidence level.
     abline(-5.70,2.5)  
     ```
 
+    This is an example from the package, using a 90% confidence level.
+
   ![confidence ellipse](Ellipse.png){width=60%}
 
-  - With 95% probability, &theta; is somewhere inside the ellipsoid.
+  - With 90% probability, &theta; is somewhere inside the ellipsoid.
     (Note that it is the ellipsoid that is random, not &theta;.)
 
   - And, if &theta; is in the ellipsoid, then w'&theta; will be in
-    (c<sub>w</sub>,b<sub>w</sub>) (though not *only* if). In other
-    words, (c<sub>w</sub>,b<sub>w</sub>) is a confidence interval for
-    w'&theta; of level at least 95%.
+    (c<sub>w</sub>,b<sub>w</sub>), though not *only* if; it is clear
+    that there are some values of &theta; that are outside the ellipse
+    but still between the two lines.  In other words,
+    (c<sub>w</sub>,b<sub>w</sub>) is a confidence interval for w'&theta;
+    of level at least 90%.
 
   - For each possible w, we get the above pair of tangents.
     Geometrically it is clear that &theta; will be inside the ellipsoid
@@ -703,7 +709,7 @@ have a simultaneous confidence level.
     *for all w*.
 
   - Thus the probability that all the intervals
-    (c<sub>w</sub>,b<sub>w</sub>) hold simultaneously is 95%.
+    (c<sub>w</sub>,b<sub>w</sub>) hold simultaneously is 90%.
 
 <!-- TOC --><a name="simulation-of-mv-normal-random-vectors"></a>
 # Simulation of MV Normal Random Vectors
@@ -743,7 +749,7 @@ Y = &beta;<sub>0</sub> +
 
 where &epsilon; has a N(0,&sigma;<sup>2</sup>) distribution and is
 independent of X. (In the fixed-X context, the latter assumption is
-automatic.
+automatic.)
 
 So, one can use **mvrnorm** to generate X, then **rnorm** to generate
 &epsilon;, thus obtaining Y.
@@ -759,7 +765,7 @@ So, one can use **mvrnorm** to generate X, then **rnorm** to generate
 * For random vectors V<sub>i</sub>, replace | | by, e.g. Euclidean
   distance.
 
-* Say we have random variables Q<sub>n</sub>, not necessarily iid. If
+* Say we have random variables Q<sub>n</sub>. If
   for some constant c we have
 
   P(lim<sub>n &rarr; &infin;</sub> Q<sub>n</sub> = c) = 1
@@ -790,7 +796,7 @@ So, one can use **mvrnorm** to generate X, then **rnorm** to generate
 * In p dimensions, we say that X<sub>i</sub> converges *in distribution* 
   to X if the p-dimensional cdfs converge.
 
-* That definition is hard to deal with, but the Cramer-Wold device often
+  That definition is hard to deal with, but the Cramer-Wold device often
   makes things easy: Consider a sequence of random vectors X<sub>n</sub>
   and another random vector X. Then X<sub>n</sub> converges in
   distribution to X if and only if for all p-vectors c, c'X<sub>n</sub>
@@ -845,6 +851,8 @@ So, one can use **mvrnorm** to generate X, then **rnorm** to generate
 
   n<sup>0.5</sup>(Q<sub>n</sub> - &nu;)/&gamma;
 
+  converges (pointwise) to the cdf of N(0,1).
+
 * Multivariate Central Limit Theorem: Let X<sub>i</sub>, i = 1,2,... be
   iid random vectors with mean vector &mu; and covariance matrix &Sigma;.
   Define T<sub>n</sub> = X<sub>1</sub>+...+X<sub>n</sub>, which has mean
@@ -865,7 +873,7 @@ requested.
 *Background on MM estimators*
 
 * Suppose we are modeling a random variable with some parametric
-    distribution family, such as normal, exonential or gamma. We want to
+    distribution family, such as normal, exponential or gamma. We want to
     estimate the parameter(s) from our data
     X<sub>1</sub>,...,X<sub>n</sub>. How can we do this?
 
@@ -883,9 +891,9 @@ requested.
     for some unknown parameter &tau;.  How do we construct the MM
     estimate T of &tau;?
 
-    The mean of this distribution is 1/&tau;, which would be estimated by 
-    1/T. On the other hand, the classical estimate of a population mean
-    is the sample mean,
+    The mean of this distribution is 1/&tau;, which could be estimated
+    by 1/T once we obtain T. On the other hand, the classical estimate
+    of a population mean is the sample mean,
 
     X<sub>bar</sub> = 
     (1/n) ( X<sub>1</sub>+...+X<sub>n</sub>) 
@@ -898,6 +906,8 @@ requested.
     That gives us our MM estimate,
 
     T = 1/X<sub>bar</sub>
+
+    Done!
 
 * How does MM work in general, when we have more than one parameter?
     Let's use k to denote the number of parameters in the given parametric
@@ -945,10 +955,10 @@ requested.
   a common model used in network communications and medical survival
   analysis for example.  
 
-  Here is what the gamma family of densities looks like (from
+  Here is what the gamma family of densities looks like. (From
   *Probability and Statistics for Data Science: Math + R + Data*, N.
   Matloff, 2019. Here r and &lambda; refer to our &tau;<sub>2</sub>
-  and &tau;<sub>1</sub>)  
+  and &tau;<sub>1</sub>.)  
 
   ![Some densities from the gamma family](Gamma.png)
 
@@ -1003,7 +1013,7 @@ requested.
   &tau;<sub>2</sub>, and they are consistent. But the latter is a very
   weak property. For good practical value, it would be desirable to
   obtain confidence intervals for the &tau;<sub>i</sub> from the
-  T<sub>i</sub>. For this we need asymptotic normality, as follows.
+  T<sub>k</sub>. For this we need asymptotic normality, as follows.
 
 * For simplicity, let's consider the case k = 1, so the density family
   has a single scalar parameter, &tau;, as we saw in the exponential
@@ -1021,7 +1031,7 @@ requested.
 
   g(T) = M<sub>1</sub>
 
-  Then rewrite the earlier equation as
+  Then write 
 
   n<sup>0.5</sup>(M<sub>1</sub> - m<sub>1</sub>) =
   n<sup>0.5</sup> [g(T) - g(&tau;)] =
