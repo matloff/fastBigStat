@@ -12,7 +12,7 @@
    * [Estimation ](#estimation)
    * [Exact inference](#exact-inference)
    * [Approximate inference](#approximate-inference)
-   * [Heterodscedastic case](#heteroscedastic-case)
+   * [Relaxing the assumptions](#relaxing-the-assumptions)
 - [Simulation of MV Normal Random Vectors](#simulation-of-mv-normal-random-vectors)
 - [Types of Convergence](#types-of-convergence)
 - [Central Limit Theorems (CLTs)](#central-limit-theorems-clts)
@@ -471,8 +471,8 @@ without assuming a normal Y|X:
 
     c'b &plusmn; 1.96 [s<sup>2</sup> c'(A'A)<sup>-1</sup>c]<sup>0.5</sup>
 
-<!-- TOC --><a name="heteroscedastic-case"></a>
-## Heterodscedastic case
+<!-- TOC --><a name="relaxing-the-assumptions"></a>
+## Relaxing the assumptions
 
 Just as Box pointed out that no model is perfect, no assumption (really,
 part of a model) is perfect. The *homoscedasticity* assumption, 
