@@ -1099,7 +1099,7 @@ requested.
   n<sup>0.5</sup>
   A (T - &tau;)
 
-  where the matrix consists of g<sub>&Del;</sub>' in row 1 and
+  where the matrix A consists of g<sub>&Del;</sub>' in row 1 and
   h<sub>&Del;</sub>' in row 2.
 
 * So, finally, we have that the asymptotic distribution of
@@ -1114,14 +1114,14 @@ requested.
 # The Delta Method
 
 * Earlier we said, "if a sequence of random variables Z<sub>n</sub>
-  (actually including the case of random vectors and an MV normal
-  limit), is asymptotically normal, then so is any smooth function of
-  them g(Z<sub>n</sub>)." This fact is quite useful.
+  including the case of random vectors), is asymptotically normal, then
+  so is any smooth function of them g(Z<sub>n</sub>)." This fact is
+  quite useful.
 
 * Before we go on, note again that "asymptotically normal" means in the
-  sense of the CLT. So if we say "g(Z<sub>n</sub>)," we mean that its
-  cdf is approximately equal to a normal cdf, and we must scale by
-  n<sup>0.5</sup>.
+  sense of the CLT. So if we say "g(Z<sub>n</sub>) is asymptotically
+  normal," we mean that its cdf is approximately equal to a normal cdf,
+  and we must scale by n<sup>0.5</sup>.
 
 * The proof is similar to our derivation for MM estimators above. E.g.
   for dimension 2, set &mu;= (&mu;<sub>1</sub>,&mu;<sub>2</sub>) to
@@ -1131,12 +1131,12 @@ requested.
   Now write
 
   g(Z<sub>n</sub>) - &mu; &approx; 
-  g<sub>1</sub>(&mu;)(</sub>(Z<sub>1n</sub> - &mu;<sub>1</sub>) +
-  g<sub>2</sub>(&mu;)(</sub>(Z<sub>2n</sub> - &mu;<sub>2</sub>) =
-  A (Z - &mu;)
+  g<sub>1</sub>(&mu;)(</sub>Z<sub>1n</sub> - &mu;<sub>1</sub>) +
+  g<sub>2</sub>(&mu;)(</sub>Z<sub>2n</sub> - &mu;<sub>2</sub>) =
+  A (Z<sub>n</sub> - &mu;)
 
   where the 1 x 2 matrix A = (g<sub>1</sub>(&mu;), g<sub>2</sub>(&mu;)).
 
-  The right-hand side is now a linear form in an MV normally distributed
-  vector, thus MV (actually univariate) normal, with mean 0 and
-  variance A &Sigma; A'.
+  The right-hand side is now a linear form in an asymptotically MV
+normally distributed vector, thus asymptotically MV (actually
+univariate) normal, with mean 0 and variance A &Sigma; A'.
