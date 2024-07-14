@@ -13,13 +13,17 @@
    * [Exact inference](#exact-inference)
    * [Approximate inference](#approximate-inference)
    * [Relaxing the assumptions](#relaxing-the-assumptions)
+- [Multiple Inference Procedures](#multiple-inference-procedures)
+   * [The Bonferroni Inequality](#the-bonferroni-inequality)
+   * [The Scheffe' method](#the-scheffe-method)
 - [Simulation of MV Normal Random Vectors](#simulation-of-mv-normal-random-vectors)
 - [Types of Convergence](#types-of-convergence)
 - [Central Limit Theorems (CLTs)](#central-limit-theorems-clts)
-- [Example: Method of Moments (MM) Estimators](#extended-example-method-of-moments-mm-estimators)
+- [Example: Method of Moments (MM) Estimators](#example-method-of-moments-mm-estimators)
 - [The Delta Method](#the-delta-method)
 
 <!-- TOC end -->
+
 
 
 
@@ -489,10 +493,10 @@ The quantity A'W consists of sums, so *b is asymptotically MV normally
 distributed*.  Thus for large n, we can perform inference without
 assuming a normal Y|X:
 
-  - CIs for c'&beta;: An approximate 95% confidence interval for, e.g.
-    &beta;<sub>2</sub> - &beta;<sub>1</sub> is 
+CIs for c'&beta;: An approximate 95% confidence interval for, e.g.
+&beta;<sub>2</sub> - &beta;<sub>1</sub> is 
 
-    c'b &plusmn; 1.96 [s<sup>2</sup> c'(A'A)<sup>-1</sup>c]<sup>0.5</sup>
+c'b &plusmn; 1.96 [s<sup>2</sup> c'(A'A)<sup>-1</sup>c]<sup>0.5</sup>
 
 <!-- TOC --><a name="relaxing-the-assumptions"></a>
 ## Relaxing the assumptions
@@ -594,6 +598,7 @@ E[(Y - v'X)<sup>2</sup>]
 i.e. b will converge to &beta;. However, a formal proof of this requires
 some real analysis.
 
+<!-- TOC --><a name="multiple-inference-procedures"></a>
 # Multiple Inference Procedures
 
 Suppose we form two 95% confidence intervals from our dataset. Though
@@ -606,6 +611,7 @@ still have their joint confidence level at or above 95%?
 This branch of statistics is called *multiple inference* or
 *simultaneous inference*.
 
+<!-- TOC --><a name="the-bonferroni-inequality"></a>
 ## The Bonferroni Inequality
 
 One solution is to use the *Bonferroni Inequality*, which says that for
@@ -616,6 +622,7 @@ P(A and B) &ge; 1 - P(not A) - P(not B)
 This implies that if we want joint confidence level of two CIs to be at
 least 95%, we can form each at the 97.5% level.
 
+<!-- TOC --><a name="the-scheffe-method"></a>
 ## The Scheffe' method
 
 But this conservative approach is not feasible for forming more than two
@@ -863,7 +870,7 @@ So, one can use **mvrnorm** to generate X, then **rnorm** to generate
   converges in distribution to  N(0,&Sigma;). This can easily be proved using
   the Cramer-Wold device.
 
-<!-- TOC --><a name="extended-example-method-of-moments-mm-estimators"></a>
+<!-- TOC --><a name="example-method-of-moments-mm-estimators"></a>
 # Example: Method of Moments (MM) Estimators
 
 This is a serious application of the above methodology, and will take
