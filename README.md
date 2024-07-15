@@ -13,6 +13,7 @@
    * [Exact inference](#exact-inference)
    * [Approximate inference](#approximate-inference)
    * [Relaxing the assumptions](#relaxing-the-assumptions)
+   * [No-intercept models](#no-intercept-models)
 - [Multiple Inference Procedures](#multiple-inference-procedures)
    * [The Bonferroni Inequality](#the-bonferroni-inequality)
    * [The Scheffe' method](#the-scheffe-method)
@@ -598,6 +599,24 @@ E[(Y - v'X)<sup>2</sup>]
 i.e. b will converge to &beta;. However, a formal proof of this requires
 some real analysis.
 
+<!-- TOC --><a name="no-intercept-models"></a>
+## No-intercept models
+
+In some settings, it is known from the nature of the problem that
+&beta;<sub>0</sub> = 0. Thus our model is
+
+E(Y | X = t) = 
+  &beta;<sub>1</sub> t<sub>1</sub> + ... +
+  &beta;<sub>p</sub> t<sub>p</sub>
+
+R's **lm** function allows us to specify this via -1 ("delete the
+constant term") in the model specification.
+
+In simulation settings, it's often inconvenient to have an intercept
+term, but one can always transform to it by subtracting the means of
+each X feature and Y. This is easily done using the **scale** function,
+with **center** set to TRUE.
+
 <!-- TOC --><a name="multiple-inference-procedures"></a>
 # Multiple Inference Procedures
 
@@ -1115,7 +1134,9 @@ requested.
  
   A<sup>-1</sup> Cov(M) A<sup>-1</sup>'
  
-  This enables confidence intervals and ellipsoids as before.
+  This enables confidence intervals and ellipsoids as before. Of course,
+  the matrix A must be estimated, by substituting T for &tau;. Again,
+  this can be justified using the Slutsky properties.
 
 <!-- TOC --><a name="the-delta-method"></a>
 # The Delta Method
@@ -1145,5 +1166,6 @@ requested.
   where the 1 x 2 matrix A = (g<sub>1</sub>(&mu;), g<sub>2</sub>(&mu;)).
 
   The right-hand side is now a linear form in an asymptotically MV
-normally distributed vector, thus asymptotically MV (actually
-univariate) normal, with mean 0 and variance A &Sigma; A'.
+  normally distributed vector, thus asymptotically MV (actually
+  univariate) normal, with mean 0 and variance A &Sigma; A'. Again, A
+  must be estimated as we say in the Delta method above.
